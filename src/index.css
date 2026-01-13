@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color: #0f172a;
+    background-color: #ffffff;
+  }
+
+  * {
+    font-feature-settings: 'ss01' on, 'ss02' on, 'cv01' on;
+  }
+
+  body {
+    @apply font-sans antialiased text-slate-900;
+    min-height: 100vh;
+    background-color: #ffffff;
+  }
+
+  ::selection {
+    @apply bg-brand-500 text-white;
+  }
+
+  a {
+    @apply transition-colors duration-200;
+  }
+}
+
+@layer components {
+  .page-shell {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .glass-panel {
+    @apply bg-white/80 backdrop-blur-2xl border border-white/60 shadow-card;
+  }
+
+  .frosted-card {
+    @apply bg-white/70 backdrop-blur-xl border border-white/60 shadow-lg shadow-slate-900/5;
+  }
+
+  .section-title {
+    @apply text-3xl md:text-4xl font-heading font-semibold tracking-tight text-slate-900;
+  }
+
+  .section-subtitle {
+    @apply text-base text-slate-600 max-w-2xl mx-auto;
+  }
+
+  .accent-pill {
+    @apply inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 text-xs font-semibold uppercase tracking-[0.25em] text-slate-700 px-4 py-1.5;
+  }
+}
+
+@layer utilities {
+  @keyframes shake {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+      transform: translateX(-4px);
+    }
+    20%,
+    40%,
+    60%,
+    80% {
+      transform: translateX(4px);
+    }
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-shake {
+    animation: shake 0.5s;
+  }
+
+  .animate-slideDown {
+    animation: slideDown 0.3s ease-out;
+  }
+
+  .gradient-border {
+    position: relative;
+  }
+
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(246, 63, 81, 0.5), rgba(79, 70, 229, 0.4));
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+}
