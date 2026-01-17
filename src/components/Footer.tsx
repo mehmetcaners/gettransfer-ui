@@ -1,98 +1,106 @@
-import { Phone, Mail, MapPin, Instagram } from 'lucide-react';
+import { Phone, Mail, Instagram } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import WhatsAppIcon from './icons/WhatsAppIcon';
 
 export default function Footer() {
   const companyName = import.meta.env.VITE_COMPANY_NAME || 'GetTransfer İstanbul';
-  const companyAddress = import.meta.env.VITE_COMPANY_ADDRESS || 'İstanbul, Türkiye';
   const whatsapp = import.meta.env.VITE_WHATSAPP || '+905551112233';
   const instagramUrl = import.meta.env.VITE_INSTAGRAM || 'https://instagram.com/gettransferistanbul';
   const { dictionary } = useLanguage();
   const { footer, general, contact } = dictionary;
 
   return (
-    <footer className="relative overflow-hidden bg-[#06070d] text-gray-300">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(246,63,81,0.15),_transparent_45%)]" aria-hidden />
-      <div className="absolute inset-0 opacity-40" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'120\' height=\'120\' viewBox=\'0 0 120 120\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-opacity=\'0.3\'%3E%3Cpath d=\'M60 0L120 60L60 120L0 60Z\' stroke=\'%23ffffff10\'/%3E%3C/g%3E%3C/svg%3E")' }} aria-hidden />
-      <div className="page-shell relative py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-10">
-          <div className="lg:col-span-2 space-y-5">
+    <footer className="relative overflow-hidden bg-slate-900 text-slate-300 pt-20 pb-10">
+      {/* Background Ambience */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(99,102,241,0.15),_transparent_50%)]" aria-hidden />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_rgba(166,114,66,0.1),_transparent_50%)]" aria-hidden />
+
+      <div className="page-shell relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 mb-16">
+          <div className="lg:col-span-2 space-y-6">
             <div>
-              <p className="accent-pill border-white/20 text-white/70">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-brand-300 mb-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse" />
                 {footer.quickLinksTitle}
-              </p>
-              <h3 className="mt-4 text-3xl font-heading font-semibold text-white">{companyName}</h3>
+              </div>
+              <h3 className="text-3xl font-heading font-medium text-white tracking-tight">{companyName}</h3>
             </div>
-            <p className="text-sm md:text-base text-white/70 max-w-xl leading-relaxed">
+            <p className="text-base text-slate-400 max-w-lg leading-relaxed">
               {footer.description}
             </p>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4 pt-2">
               <a
                 href={`https://wa.me/${whatsapp.replace(/\+/g, '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-12 h-12 rounded-2xl bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/25 hover:-translate-y-0.5 transition-transform"
+                className="w-12 h-12 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white shadow-lg shadow-emerald-900/20 hover:-translate-y-1 transition-transform duration-300"
                 aria-label={general.whatsappAria}
               >
-                <WhatsAppIcon size={22} />
+                <WhatsAppIcon size={24} />
               </a>
               <a
                 href={instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400 flex items-center justify-center text-white shadow-lg shadow-pink-500/30 hover:-translate-y-0.5 transition-transform"
+                className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400 flex items-center justify-center text-white shadow-lg shadow-pink-900/20 hover:-translate-y-1 transition-transform duration-300"
                 aria-label={contact.instagramAria}
               >
-                <Instagram size={22} />
+                <Instagram size={24} />
               </a>
             </div>
           </div>
 
-          <div className="space-y-4">
-            <h4 className="text-white font-semibold text-lg">{footer.contactTitle}</h4>
-            <div className="space-y-4 text-sm">
+          <div className="space-y-6">
+            <h4 className="text-white font-semibold text-lg tracking-wide">{footer.contactTitle}</h4>
+            <div className="space-y-4">
               <a
                 href={`tel:${whatsapp}`}
-                className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 hover:border-brand-500/40 transition-colors"
+                className="group flex items-center gap-4 rounded-2xl border border-white/5 bg-white/5 px-5 py-4 hover:bg-white/10 hover:border-white/10 transition-all duration-300"
               >
-                <Phone size={18} className="text-brand-200" />
-                <span>{whatsapp}</span>
+                <div className="w-10 h-10 rounded-full bg-brand-500/10 flex items-center justify-center group-hover:bg-brand-500/20 transition-colors">
+                  <Phone size={18} className="text-brand-400" />
+                </div>
+                <span className="text-slate-300 group-hover:text-white transition-colors">{whatsapp}</span>
               </a>
               <a
                 href="mailto:info@gettransfer-istanbul.com"
-                className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 hover:border-brand-500/40 transition-colors break-all"
+                className="group flex items-center gap-4 rounded-2xl border border-white/5 bg-white/5 px-5 py-4 hover:bg-white/10 hover:border-white/10 transition-all duration-300 break-all"
               >
-                <Mail size={18} className="text-brand-200" />
-                <span>info@gettransfer-istanbul.com</span>
+                <div className="w-10 h-10 rounded-full bg-brand-500/10 flex items-center justify-center group-hover:bg-brand-500/20 transition-colors">
+                  <Mail size={18} className="text-brand-400" />
+                </div>
+                <span className="text-slate-300 group-hover:text-white transition-colors">info@gettransfer-istanbul.com</span>
               </a>
-              <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-                <MapPin size={18} className="mt-1 text-brand-200" />
-                <span>{companyAddress}</span>
-              </div>
             </div>
           </div>
 
-          <div>
-            <h4 className="text-white font-semibold text-lg mb-4">{footer.quickLinksTitle}</h4>
-            <div className="space-y-2 text-sm text-white/70">
-              <a href="/about" className="block rounded-xl px-3 py-2 hover:bg-white/5">
-                {footer.links.about}
-              </a>
-              <a href="/contact" className="block rounded-xl px-3 py-2 hover:bg-white/5">
-                {footer.links.contact}
-              </a>
-              <a href="/#faq" className="block rounded-xl px-3 py-2 hover:bg-white/5">
-                {footer.links.faq}
-              </a>
-            </div>
+          <div className="space-y-6">
+            <h4 className="text-white font-semibold text-lg tracking-wide">{footer.quickLinksTitle}</h4>
+            <ul className="space-y-3">
+              {[
+                { href: '/about', label: footer.links.about },
+                { href: '/contact', label: footer.links.contact },
+                { href: '/#faq', label: footer.links.faq },
+              ].map((link) => (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    className="flex items-center gap-2 text-slate-400 hover:text-brand-300 transition-colors py-1"
+                  >
+                    <span className="w-1 h-1 rounded-full bg-slate-600" />
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
-        <div className="mt-12 grid gap-4 md:grid-cols-2">
-          <div className="rounded-3xl border border-white/10 bg-white/[0.04] px-6 py-5 text-sm text-white/70">
+        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row gap-6 items-center justify-between">
+          <p className="text-sm text-slate-500">
             {footer.rights(new Date().getFullYear(), companyName)}
-          </div>
-          <div className="rounded-3xl border border-white/10 bg-gradient-to-r from-brand-500/20 to-brand-600/20 px-6 py-5 text-sm font-semibold text-brand-100">
+          </p>
+          <div className="rounded-full border border-brand-500/30 bg-brand-900/20 px-6 py-2 text-xs font-semibold tracking-wide text-brand-300 uppercase">
             {footer.cashWarning}
           </div>
         </div>

@@ -1,7 +1,7 @@
 import type { SVGProps } from 'react';
 
 type WhatsAppIconProps = SVGProps<SVGSVGElement> & {
-  size?: number;
+  size?: number | string;
 };
 
 export default function WhatsAppIcon({ size = 24, ...props }: WhatsAppIconProps) {

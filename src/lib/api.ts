@@ -22,12 +22,15 @@ export interface SearchResult {
   type: VehicleType;
   name: string;
   price: number;
+  priceOneWay?: number;
+  priceTotal?: number;
   currency: string;
   imageUrl?: string;
   vehicleTypeId?: string | number;
   categoryId?: number;
   seats?: number;
   bags?: number;
+  routeUrl?: string;
   priceOptions?: { currency: string; amount: number }[];
   capacity: {
     passengers: number;
@@ -56,12 +59,22 @@ export interface PlaceSuggestion {
 }
 
 export interface BookingPayload extends SearchRequestPayload {
+  firstName: string;
+  lastName: string;
+  email: string;
   fullName: string;
   phone: string;
   vehicleType: VehicleType;
   vehicleId?: string;
+  vehicleTypeId?: string | number;
   vehicleName?: string;
   price?: number;
+  priceOneWay?: number;
+  priceTotal?: number;
+  currency?: string;
+  seats?: number;
+  bags?: number;
+  routeUrl?: string;
   notes?: string;
 }
 
@@ -125,12 +138,14 @@ function normaliseSearchResponse(payload: unknown): SearchResponse {
       const raw = item as Record<string, unknown>;
       const passengers = toNumber(raw.seats) ?? 4;
       const luggage = toNumber(raw.bags) ?? Math.max(2, Math.floor(passengers / 2));
-      const priceTotal = toNumber(raw.price_total ?? raw.price_one_way ?? raw.price) ?? 0;
+      const priceOneWay = toNumber(raw.price_one_way ?? raw.priceOneWay ?? raw.price) ?? 0;
+      const priceTotal = toNumber(raw.price_total ?? raw.priceTotal) ?? priceOneWay;
       const currency = String((raw.currency ?? defaultCurrency ?? 'TRY') as string).toUpperCase();
       const vehicleName = String((raw.vehicle_type ?? raw.name ?? 'Transfer') as string);
       const vehicleTypeId = (raw.vehicle_type_id ?? raw.vehicleTypeId ?? raw.vehicleId) as string | number | undefined;
       const categoryId = (raw.category_id ?? raw.categoryId) as number | undefined;
       const imageUrl = (raw.image_url ?? raw.imageUrl) as string | undefined;
+      const routeUrl = typeof raw.route_url === 'string' ? raw.route_url : undefined;
 
       const idParts = [vehicleTypeId, currency, categoryId].filter(Boolean).map(String);
       const id = idParts.length ? idParts.join('-') : safeId();
@@ -140,19 +155,22 @@ function normaliseSearchResponse(payload: unknown): SearchResponse {
         type: normaliseVehicleType(vehicleName),
         name: vehicleName,
         price: priceTotal,
+        priceOneWay,
+        priceTotal,
         currency,
         imageUrl,
         vehicleTypeId,
         categoryId,
         seats: passengers,
         bags: luggage,
+        routeUrl,
         priceOptions: [{ currency, amount: priceTotal }],
         capacity: {
           passengers,
           luggage,
         },
         features: [],
-        provider: typeof raw.route_url === 'string' ? raw.route_url : undefined,
+        provider: routeUrl,
         etaMin: undefined,
       } satisfies SearchResult;
     })
@@ -202,19 +220,129 @@ export async function fetchPlaceSuggestions(query: string, signal?: AbortSignal)
   }));
 }
 
-export async function createBooking(payload: BookingPayload): Promise<{ success: boolean; id?: string }> {
-  try {
-    const response = await fetch(`${baseUrl}/api/public/bookings`, {
-      method: 'POST',
-      headers: defaultHeaders,
-      body: JSON.stringify(payload),
-    });
+export type BookingStatus = 'PENDING' | 'CONFIRMED' | 'CANCELED' | 'EXPIRED';
 
-    const data = await handleResponse<{ id?: string; reference?: string; bookingId?: string }>(response);
-    return { success: true, id: data.id ?? data.reference ?? data.bookingId };
-  } catch (error) {
-    console.warn('Booking API not available, using fallback', error);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    return { success: true, id: 'FALLBACK-' + Date.now() };
-  }
+export interface BookingResponse {
+  id: string;
+  pnrCode?: string;
+  voucherNo?: string;
+  status?: BookingStatus;
+  confirmUrl?: string;
+  confirmPath?: string;
+  confirmToken?: string | null;
+  voucherUrl?: string;
 }
+
+export interface BookingConfirmResult {
+  bookingId: string;
+  status: BookingStatus;
+  confirmedAt?: string;
+}
+
+const absoluteUrl = (url: string) => {
+  try {
+    return new URL(url, baseUrl).toString();
+  } catch {
+    return url;
+  }
+};
+
+const parseConfirmUrl = (url?: string | null) => {
+  if (!url) return null;
+  try {
+    const parsed = new URL(url);
+    return {
+      bookingId: parsed.searchParams.get('booking_id'),
+      token: parsed.searchParams.get('token'),
+      path: parsed.pathname + parsed.search,
+      url: parsed.toString(),
+    };
+  } catch {
+    return null;
+  }
+};
+
+const buildVoucherUrl = (bookingId: string) => `${baseUrl}/api/bookings/${bookingId}/voucher.pdf`;
+
+const normaliseBookingResponse = (raw: Record<string, unknown>): BookingResponse => {
+  const id = String(raw.id ?? raw.booking_id ?? raw.bookingId ?? '');
+  const confirmRaw = (raw.confirm_url ?? raw.confirmUrl) as string | undefined;
+  const voucherRaw = (raw.voucher_pdf_url ?? raw.voucherPdfUrl) as string | undefined;
+  const parsedConfirm = parseConfirmUrl(confirmRaw);
+
+  return {
+    id,
+    pnrCode: (raw.pnr_code ?? raw.pnrCode) as string | undefined,
+    voucherNo: (raw.voucher_no ?? raw.voucherNo) as string | undefined,
+    status: (raw.status as BookingStatus | undefined) ?? 'PENDING',
+    confirmUrl: parsedConfirm?.url ?? confirmRaw,
+    confirmPath: parsedConfirm?.path,
+    confirmToken: parsedConfirm?.token ?? null,
+    voucherUrl: voucherRaw ? absoluteUrl(voucherRaw) : id ? buildVoucherUrl(id) : undefined,
+  };
+};
+
+export async function createBooking(payload: BookingPayload): Promise<BookingResponse> {
+  const vehicleTypeId = toNumber(payload.vehicleTypeId ?? payload.vehicleId);
+  if (!vehicleTypeId) {
+    throw new Error('Araç tipi bilgisi eksik.');
+  }
+
+  const seats = payload.seats ?? payload.passengers ?? 1;
+  const bags = payload.bags ?? Math.max(1, Math.floor(seats / 2));
+  const roundtrip = Boolean(payload.roundTrip);
+  const currency = String((payload.currency ?? defaultCurrency ?? 'TRY') as string).toUpperCase();
+  const basePrice = payload.priceOneWay ?? (roundtrip ? (payload.price ?? 0) / 2 : payload.price ?? 0);
+
+  const body = {
+    from_placeid: payload.from.placeId,
+    to_placeid: payload.to.placeId,
+    from_text: payload.from.description,
+    to_text: payload.to.description,
+    route_url: payload.routeUrl ?? payload.vehicleName ?? undefined,
+    pickup_datetime: payload.datetime,
+    roundtrip,
+    pax: payload.passengers,
+    vehicle_type_id: vehicleTypeId,
+    vehicle_name_snapshot: payload.vehicleName ?? payload.vehicleType,
+    seats_snapshot: seats,
+    bags_snapshot: bags,
+    currency,
+    base_price: basePrice,
+    extras: [],
+    payment_method: 'CASH_TO_DRIVER',
+    first_name: payload.firstName,
+    last_name: payload.lastName,
+    email: payload.email,
+    phone: payload.phone,
+    note: payload.notes,
+  };
+
+  const response = await fetch(`${baseUrl}/api/bookings`, {
+    method: 'POST',
+    headers: defaultHeaders,
+    body: JSON.stringify(body),
+  });
+
+  const data = await handleResponse<Record<string, unknown>>(response);
+  return normaliseBookingResponse(data);
+}
+
+export async function confirmBooking(bookingId: string, token: string): Promise<BookingConfirmResult> {
+  const url = new URL(`${baseUrl}/api/bookings/${bookingId}/confirm`);
+  url.searchParams.set('token', token);
+
+  const response = await fetch(url.toString(), {
+    method: 'POST',
+    headers: defaultHeaders,
+  });
+
+  const data = await handleResponse<Record<string, unknown>>(response);
+  return {
+    bookingId: String(data.booking_id ?? bookingId),
+    status: (data.status as BookingStatus | undefined) ?? 'CONFIRMED',
+    confirmedAt: data.confirmed_at as string | undefined,
+  };
+}
+
+export { buildVoucherUrl };

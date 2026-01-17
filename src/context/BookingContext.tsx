@@ -17,17 +17,30 @@ export interface SelectedVehicle extends SearchResult {
   priceOptions?: { currency: string; amount: number }[];
 }
 
+export interface BookingData {
+  id: string;
+  pnrCode?: string;
+  voucherNo?: string;
+  status?: string;
+  confirmUrl?: string;
+  confirmToken?: string | null;
+  confirmPath?: string;
+  voucherUrl?: string;
+}
+
 interface BookingContextType {
   searchParams: SearchParams | null;
   searchResults: SearchResult[] | null;
   searchSummary: SearchSummary | null;
   bookingReference: string | null;
+  bookingData: BookingData | null;
   selectedVehicle: SelectedVehicle | null;
   setSearchParams: (params: SearchParams) => void;
   setSearchResults: (results: SearchResult[] | null) => void;
   setSearchSummary: (summary: SearchSummary | null) => void;
   setSelectedVehicle: (vehicle: SelectedVehicle | null) => void;
   setBookingReference: (value: string | null) => void;
+  setBookingData: (value: BookingData | null) => void;
   clearBooking: () => void;
 }
 
@@ -39,6 +52,7 @@ export function BookingProvider({ children }: { children: ReactNode }) {
   const [searchSummary, setSearchSummary] = useState<SearchSummary | null>(null);
   const [selectedVehicle, setSelectedVehicle] = useState<SelectedVehicle | null>(null);
   const [bookingReference, setBookingReference] = useState<string | null>(null);
+  const [bookingData, setBookingData] = useState<BookingData | null>(null);
 
   const clearBooking = () => {
     setSearchParams(null);
@@ -46,6 +60,7 @@ export function BookingProvider({ children }: { children: ReactNode }) {
     setSearchSummary(null);
     setSelectedVehicle(null);
     setBookingReference(null);
+    setBookingData(null);
   };
 
   return (
@@ -55,12 +70,14 @@ export function BookingProvider({ children }: { children: ReactNode }) {
         searchResults,
         searchSummary,
         bookingReference,
+        bookingData,
         selectedVehicle,
         setSearchParams,
         setSearchResults,
         setSearchSummary,
         setSelectedVehicle,
         setBookingReference,
+        setBookingData,
         clearBooking,
       }}
     >

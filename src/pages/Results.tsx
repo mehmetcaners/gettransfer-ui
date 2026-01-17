@@ -17,6 +17,12 @@ type GroupedVehicle = {
   type: VehicleType;
   capacity: { passengers: number; luggage: number };
   imageUrl?: string;
+  vehicleTypeId?: string | number;
+  seats?: number;
+  bags?: number;
+  routeUrl?: string;
+  priceOneWay?: number;
+  priceTotal?: number;
   prices: PriceOption[];
   primaryPrice: PriceOption;
   badge?: string | null;
@@ -54,6 +60,12 @@ function groupResults(items: SearchResult[]): GroupedVehicle[] {
       name: item.name,
       type: item.type,
       imageUrl: item.imageUrl,
+      vehicleTypeId: item.vehicleTypeId,
+      seats: item.seats ?? passengers,
+      bags: item.bags ?? luggage,
+      routeUrl: item.routeUrl ?? item.provider,
+      priceOneWay: item.priceOneWay,
+      priceTotal: item.priceTotal ?? item.price,
       capacity: {
         passengers,
         luggage,
@@ -123,6 +135,10 @@ export default function Results() {
     }
   }, [searchParams, navigate]);
 
+  if (!searchParams) {
+    return null;
+  }
+
   const grouped = useMemo(() => groupResults(searchResults ?? []), [searchResults]);
   const withBadges = useMemo(() => {
     if (!grouped.length) return grouped;
@@ -163,6 +179,14 @@ export default function Results() {
       price: priceToUse.amount,
       currency: priceToUse.currency,
       imageUrl: vehicle.imageUrl,
+      vehicleTypeId: vehicle.vehicleTypeId,
+      seats: vehicle.seats ?? vehicle.capacity.passengers,
+      bags: vehicle.bags ?? vehicle.capacity.luggage,
+      routeUrl: vehicle.routeUrl,
+      priceOneWay:
+        vehicle.priceOneWay ??
+        (searchParams?.roundTrip ? priceToUse.amount / 2 : priceToUse.amount),
+      priceTotal: vehicle.priceTotal ?? priceToUse.amount,
       capacity: vehicle.capacity,
       features: [],
       priceOptions: vehicle.prices,

@@ -80,15 +80,22 @@ export type TranslationContent = {
     title: string;
     contactTitle: string;
     fields: {
-      fullName: string;
-      fullNamePlaceholder: string;
+      firstName: string;
+      firstNamePlaceholder: string;
+      lastName: string;
+      lastNamePlaceholder: string;
+      email: string;
+      emailPlaceholder: string;
       phone: string;
       phonePlaceholder: string;
       notes: string;
       notesPlaceholder: string;
     };
     errors: {
-      fullNameRequired: string;
+      firstNameRequired: string;
+      lastNameRequired: string;
+      emailRequired: string;
+      emailInvalid: string;
       phoneRequired: string;
       phoneInvalid: string;
     };
@@ -373,15 +380,22 @@ export const translations: Record<LanguageCode, LanguageDescriptor> = {
         title: 'Rezervasyon Bilgileri',
         contactTitle: 'İletişim Bilgileri',
         fields: {
-          fullName: 'Ad Soyad',
-          fullNamePlaceholder: 'Adınız ve soyadınız',
+          firstName: 'Ad',
+          firstNamePlaceholder: 'Adınız',
+          lastName: 'Soyad',
+          lastNamePlaceholder: 'Soyadınız',
+          email: 'E-posta',
+          emailPlaceholder: 'ornek@email.com',
           phone: 'Telefon',
           phonePlaceholder: '(555) 123 45 67',
           notes: 'Rezervasyon Notu (Opsiyonel)',
           notesPlaceholder: 'Örn: Çocuk koltuğu gerekli, ekstra bagaj var...',
         },
         errors: {
-          fullNameRequired: 'Ad soyad gereklidir',
+          firstNameRequired: 'Ad gereklidir',
+          lastNameRequired: 'Soyad gereklidir',
+          emailRequired: 'E-posta gereklidir',
+          emailInvalid: 'Geçerli bir e-posta adresi giriniz',
           phoneRequired: 'Telefon numarası gereklidir',
           phoneInvalid: 'Geçerli bir telefon numarası giriniz',
         },
@@ -665,15 +679,22 @@ export const translations: Record<LanguageCode, LanguageDescriptor> = {
         title: 'Booking Details',
         contactTitle: 'Contact Information',
         fields: {
-          fullName: 'Full Name',
-          fullNamePlaceholder: 'Your name and surname',
+          firstName: 'First Name',
+          firstNamePlaceholder: 'Your first name',
+          lastName: 'Last Name',
+          lastNamePlaceholder: 'Your last name',
+          email: 'Email',
+          emailPlaceholder: 'example@email.com',
           phone: 'Phone',
           phonePlaceholder: '(555) 123 45 67',
           notes: 'Booking Note (Optional)',
           notesPlaceholder: 'e.g. Need child seat, extra luggage...',
         },
         errors: {
-          fullNameRequired: 'Full name is required',
+          firstNameRequired: 'First name is required',
+          lastNameRequired: 'Last name is required',
+          emailRequired: 'Email is required',
+          emailInvalid: 'Please enter a valid email address',
           phoneRequired: 'Phone number is required',
           phoneInvalid: 'Please enter a valid phone number',
         },
@@ -962,15 +983,22 @@ export const translations: Record<LanguageCode, LanguageDescriptor> = {
         title: 'Buchungsdetails',
         contactTitle: 'Kontaktinformationen',
         fields: {
-          fullName: 'Vollständiger Name',
-          fullNamePlaceholder: 'Ihr Vor- und Nachname',
+          firstName: 'Vorname',
+          firstNamePlaceholder: 'Ihr Vorname',
+          lastName: 'Nachname',
+          lastNamePlaceholder: 'Ihr Nachname',
+          email: 'E-Mail',
+          emailPlaceholder: 'beispiel@email.com',
           phone: 'Telefon',
           phonePlaceholder: '(555) 123 45 67',
           notes: 'Buchungsnotiz (optional)',
           notesPlaceholder: 'z. B. Kindersitz benötigt, zusätzliches Gepäck...',
         },
         errors: {
-          fullNameRequired: 'Name ist erforderlich',
+          firstNameRequired: 'Vorname ist erforderlich',
+          lastNameRequired: 'Nachname ist erforderlich',
+          emailRequired: 'E-Mail ist erforderlich',
+          emailInvalid: 'Bitte eine gültige E-Mail-Adresse eingeben',
           phoneRequired: 'Telefonnummer ist erforderlich',
           phoneInvalid: 'Bitte geben Sie eine gültige Telefonnummer ein',
         },
@@ -1261,15 +1289,22 @@ export const translations: Record<LanguageCode, LanguageDescriptor> = {
         title: 'Détails de la réservation',
         contactTitle: 'Informations de contact',
         fields: {
-          fullName: 'Nom complet',
-          fullNamePlaceholder: 'Votre nom et prénom',
+          firstName: 'Prénom',
+          firstNamePlaceholder: 'Votre prénom',
+          lastName: 'Nom de famille',
+          lastNamePlaceholder: 'Votre nom de famille',
+          email: 'E-mail',
+          emailPlaceholder: 'exemple@email.com',
           phone: 'Téléphone',
           phonePlaceholder: '(555) 123 45 67',
           notes: 'Note de réservation (optionnel)',
           notesPlaceholder: "Ex. besoin d'un siège enfant, bagages supplémentaires...",
         },
         errors: {
-          fullNameRequired: 'Le nom complet est requis',
+          firstNameRequired: 'Le prénom est requis',
+          lastNameRequired: 'Le nom de famille est requis',
+          emailRequired: "L'e-mail est requis",
+          emailInvalid: 'Veuillez saisir une adresse e-mail valide',
           phoneRequired: 'Le numéro de téléphone est requis',
           phoneInvalid: 'Veuillez saisir un numéro de téléphone valide',
         },
@@ -1561,15 +1596,22 @@ export const translations: Record<LanguageCode, LanguageDescriptor> = {
         title: 'Dettagli della prenotazione',
         contactTitle: 'Informazioni di contatto',
         fields: {
-          fullName: 'Nome e cognome',
-          fullNamePlaceholder: 'Il tuo nome e cognome',
+          firstName: 'Nome',
+          firstNamePlaceholder: 'Il tuo nome',
+          lastName: 'Cognome',
+          lastNamePlaceholder: 'Il tuo cognome',
+          email: 'Email',
+          emailPlaceholder: 'esempio@email.com',
           phone: 'Telefono',
           phonePlaceholder: '(555) 123 45 67',
           notes: 'Nota di prenotazione (opzionale)',
           notesPlaceholder: 'Es. seggiolino per bambini, bagagli extra...',
         },
         errors: {
-          fullNameRequired: 'Il nome completo è obbligatorio',
+          firstNameRequired: 'Il nome è obbligatorio',
+          lastNameRequired: 'Il cognome è obbligatorio',
+          emailRequired: "L'email è obbligatoria",
+          emailInvalid: 'Inserisci un indirizzo email valido',
           phoneRequired: 'Il numero di telefono è obbligatorio',
           phoneInvalid: 'Inserisci un numero di telefono valido',
         },
@@ -1865,15 +1907,22 @@ export const translations: Record<LanguageCode, LanguageDescriptor> = {
         title: 'تفاصيل الحجز',
         contactTitle: 'معلومات الاتصال',
         fields: {
-          fullName: 'الاسم الكامل',
-          fullNamePlaceholder: 'اكتب اسمك الكامل',
+          firstName: 'الاسم الأول',
+          firstNamePlaceholder: 'اكتب اسمك',
+          lastName: 'اسم العائلة',
+          lastNamePlaceholder: 'اكتب اسم عائلتك',
+          email: 'البريد الإلكتروني',
+          emailPlaceholder: 'example@email.com',
           phone: 'الهاتف',
           phonePlaceholder: '(555) 123 45 67',
           notes: 'ملاحظات الحجز (اختياري)',
           notesPlaceholder: 'مثال: أحتاج إلى مقعد أطفال، توجد أمتعة إضافية...',
         },
         errors: {
-          fullNameRequired: 'الاسم الكامل مطلوب',
+          firstNameRequired: 'الاسم الأول مطلوب',
+          lastNameRequired: 'اسم العائلة مطلوب',
+          emailRequired: 'البريد الإلكتروني مطلوب',
+          emailInvalid: 'يرجى إدخال بريد إلكتروني صالح',
           phoneRequired: 'رقم الهاتف مطلوب',
           phoneInvalid: 'يرجى إدخال رقم هاتف صالح',
         },

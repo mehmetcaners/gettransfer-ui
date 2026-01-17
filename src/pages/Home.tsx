@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import ReservationBar, { type ReservationTab } from '../components/ReservationBar';
+import ReservationBar from '../components/ReservationBar';
 import Accordion from '../components/Accordion';
 import MapEmbed from '../components/MapEmbed';
 import { Plane, Clock, Shield, Car, MapPin } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import heroImage from '../images/anasayfagetteansfer.jpg';
+
+type ReservationTab = 'transfer' | 'hourly' | 'tours';
 
 const resolveTabFromHash = (hash: string): ReservationTab | null => {
   if (hash === '#tours') return 'tours';
@@ -47,7 +49,7 @@ export default function Home() {
     const tabFromHash = resolveTabFromHash(location.hash);
     const nextTab = state?.reservationTab ?? tabFromHash ?? 'transfer';
 
-    setReservationTab((current) => (current === nextTab ? current : nextTab));
+    setReservationTab((current: ReservationTab) => (current === nextTab ? current : nextTab));
 
     if (state?.scrollTarget === 'reservation' || tabFromHash) {
       scrollToReservation();
@@ -73,54 +75,76 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen">
-      <section className="relative overflow-hidden py-16 md:py-24">
-        <div className="absolute inset-0 bg-hero-radial opacity-70" aria-hidden />
+    <div className="min-h-screen bg-slate-50">
+      <section className="relative pt-24 pb-20 md:pt-32 md:pb-24">
+        {/* Abstract Background Elements */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden -z-10">
+          <div className="absolute top-0 inset-x-0 h-[800px] bg-gradient-to-b from-brand-50/80 to-transparent" />
+          <div className="absolute -top-[200px] -right-[200px] w-[600px] h-[600px] bg-brand-200/30 rounded-full blur-[100px] mix-blend-multiply opacity-70 animate-float" />
+          <div className="absolute top-[100px] -left-[200px] w-[500px] h-[500px] bg-sky-200/30 rounded-full blur-[100px] mix-blend-multiply opacity-70 animate-float" style={{ animationDelay: '2s' }} />
+        </div>
+
         <div className="page-shell relative">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/70 px-4 py-1">
-                <span className="h-2 w-2 rounded-full bg-brand-500" />
-                <span className="text-xs font-semibold tracking-[0.3em] text-slate-600 uppercase">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className="space-y-8 animate-fade-in-up">
+              <div className="inline-flex items-center gap-2.5 rounded-full border border-brand-200 bg-white/60 backdrop-blur-md px-4 py-1.5 shadow-sm">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-500"></span>
+                </span>
+                <span className="text-xs font-bold tracking-[0.2em] text-brand-700 uppercase">
                   {dictionary.home.advantagesTitle}
                 </span>
               </div>
-              <h1 className="text-4xl md:text-5xl xl:text-6xl font-heading font-semibold text-slate-900 leading-tight">
+
+              <h1 className="text-5xl md:text-6xl xl:text-7xl font-heading font-medium text-slate-900 leading-[1.1] tracking-tight">
                 {dictionary.home.heroTitle}
               </h1>
-              <p className="text-lg text-slate-600 max-w-2xl">
+
+              <p className="text-lg md:text-xl text-slate-600 max-w-2xl leading-relaxed">
                 {dictionary.home.heroDescription}
               </p>
-              <div className="flex flex-wrap gap-2">
+
+              <div className="flex flex-wrap gap-2.5 pt-2">
                 {cities.slice(0, 6).map((city) => (
                   <span
                     key={city}
-                    className="px-4 py-1.5 rounded-full border border-white/70 bg-white/80 text-sm font-semibold text-slate-700 shadow-sm"
+                    className="px-5 py-2 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600 shadow-sm hover:border-brand-300 hover:text-brand-600 transition-colors cursor-default"
                   >
                     {city}
                   </span>
                 ))}
               </div>
             </div>
-            <div className="relative hidden lg:block">
-              <div className="absolute -top-10 -right-6 h-64 w-64 rounded-full bg-brand-500/10 blur-3xl" aria-hidden />
+
+            <div className="relative hidden lg:block animate-scale-in">
+              <div className="absolute -inset-4 bg-gradient-to-tr from-brand-500 to-indigo-500 rounded-[48px] opacity-20 blur-2xl" />
               <img
                 src={heroImage}
                 alt={dictionary.home.heroTitle}
-                className="relative rounded-[36px] border border-white/70 shadow-[0_45px_90px_rgba(15,23,42,0.25)] object-cover"
+                className="relative rounded-[40px] border border-white/50 shadow-2xl shadow-brand-900/10 object-cover aspect-[4/3]"
               />
-              <div className="absolute left-8 right-8 -bottom-10 rounded-3xl bg-white/80 backdrop-blur-xl border border-white/70 shadow-card p-4">
-                <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
-                  {dictionary.home.advantages[0]?.title}
-                </p>
-                <p className="text-sm font-medium text-slate-800">
-                  {dictionary.home.advantages[0]?.description}
-                </p>
+
+              {/* Floating Card */}
+              <div className="absolute -left-8 -bottom-8 rounded-3xl bg-white/90 backdrop-blur-xl border border-white/60 shadow-glass p-6 animate-float" style={{ animationDelay: '1.5s' }}>
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-2xl bg-brand-50 flex items-center justify-center text-brand-600">
+                    <Shield size={24} />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-0.5">
+                      {dictionary.home.advantages[0]?.title}
+                    </p>
+                    <p className="text-sm font-bold text-slate-900">
+                      {dictionary.home.advantages[0]?.description}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          <div id="reservation" className="scroll-mt-32 mt-16">
+          <div id="reservation" className="scroll-mt-32 mt-24">
             <ReservationBar activeTab={reservationTab} onTabChange={handleReservationTabChange} />
           </div>
         </div>
