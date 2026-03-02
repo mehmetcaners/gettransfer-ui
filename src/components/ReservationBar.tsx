@@ -199,8 +199,8 @@ export default function ReservationBar({ activeTab: controlledTab, onTabChange }
           <label htmlFor="from" className="sr-only">
             {reservationBar.placeholders.from}
           </label>
-          <div className={`absolute inset-0 bg-brand-50/30 rounded-2xl transition-colors duration-300 ${activeField === 'from' ? 'bg-white ring-2 ring-brand-100' : 'group-hover:bg-brand-50/50'}`} />
-          <MapPin className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 ${activeField === 'from' ? 'text-brand-600' : 'text-brand-400/60'}`} size={20} />
+          <div className={`absolute inset-0 bg-white rounded-2xl border-2 border-brand-500 transition-all duration-300 ${activeField === 'from' ? 'ring-2 ring-brand-100' : ''}`} />
+          <MapPin className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 text-brand-600`} size={20} />
           <input
             id="from"
             type="text"
@@ -213,7 +213,7 @@ export default function ReservationBar({ activeTab: controlledTab, onTabChange }
             autoComplete="off"
             onFocus={() => setActiveField('from')}
             onBlur={() => setTimeout(() => setActiveField((prev) => (prev === 'from' ? null : prev)), 150)}
-            className={`relative bg-transparent w-full h-16 pl-12 pr-4 rounded-2xl text-slate-900 placeholder:text-slate-400 font-medium focus:outline-none transition-all`}
+            className={`relative bg-transparent w-full h-16 pl-12 pr-4 rounded-2xl text-slate-900 placeholder:text-slate-500 font-medium focus:outline-none transition-all`}
           />
           {activeField === 'from' && fromSuggestions.length > 0 && (
             <SuggestionList
@@ -243,8 +243,8 @@ export default function ReservationBar({ activeTab: controlledTab, onTabChange }
           <label htmlFor="to" className="sr-only">
             {reservationBar.placeholders.to}
           </label>
-          <div className={`absolute inset-0 bg-brand-50/30 rounded-2xl transition-colors duration-300 ${activeField === 'to' ? 'bg-white ring-2 ring-brand-100' : 'group-hover:bg-brand-50/50'}`} />
-          <MapPin className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 ${activeField === 'to' ? 'text-brand-600' : 'text-brand-400/60'}`} size={20} />
+          <div className={`absolute inset-0 bg-white rounded-2xl border-2 border-brand-500 transition-all duration-300 ${activeField === 'to' ? 'ring-2 ring-brand-100' : ''}`} />
+          <MapPin className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 text-brand-600`} size={20} />
           <input
             id="to"
             type="text"
@@ -257,7 +257,7 @@ export default function ReservationBar({ activeTab: controlledTab, onTabChange }
             autoComplete="off"
             onFocus={() => setActiveField('to')}
             onBlur={() => setTimeout(() => setActiveField((prev) => (prev === 'to' ? null : prev)), 150)}
-            className={`relative bg-transparent w-full h-16 pl-12 pr-4 rounded-2xl text-slate-900 placeholder:text-slate-400 font-medium focus:outline-none transition-all`}
+            className={`relative bg-transparent w-full h-16 pl-12 pr-4 rounded-2xl text-slate-900 placeholder:text-slate-500 font-medium focus:outline-none transition-all`}
           />
           {activeField === 'to' && toSuggestions.length > 0 && (
             <SuggestionList
@@ -293,16 +293,16 @@ export default function ReservationBar({ activeTab: controlledTab, onTabChange }
               id="passenger-btn"
               type="button"
               onClick={() => setPassengerOpen((open) => !open)}
-              className="w-full h-16 rounded-2xl bg-brand-50/50 hover:bg-brand-50 border border-transparent hover:border-brand-100 flex items-center justify-between px-4 transition-all duration-300 group ring-inset focus:ring-2 focus:ring-brand-100"
+              className="w-full h-16 rounded-2xl bg-white hover:bg-brand-50/50 border-2 border-brand-500 flex items-center justify-between px-4 transition-all duration-300 group ring-inset focus:ring-2 focus:ring-brand-200 shadow-sm"
               aria-haspopup="true"
               aria-expanded={passengerOpen}
             >
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-brand-600 shadow-sm">
+                <div className="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 shadow-sm">
                   <Users size={16} />
                 </div>
                 <div className="flex flex-col items-start">
-                  <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase group-hover:text-brand-500 transition-colors">YOLCU</span>
+                  <span className="text-[10px] font-bold tracking-wider text-brand-500 uppercase transition-colors">YOLCU</span>
                   <span className="font-semibold text-lg text-slate-900">{passengers} Kişi</span>
                 </div>
               </div>
@@ -349,10 +349,10 @@ export default function ReservationBar({ activeTab: controlledTab, onTabChange }
           <button
             onClick={handleSearch}
             disabled={loading}
-            className="w-full h-16 rounded-2xl bg-brand-600 text-white font-semibold shadow-lg shadow-brand-500/30 hover:bg-brand-700 hover:shadow-brand-600/40 hover:-translate-y-0.5 active:scale-95 transition-all flex items-center justify-center"
+            className="w-full h-16 rounded-2xl bg-white border-2 border-brand-500 text-brand-600 font-semibold shadow-sm hover:bg-brand-50/50 hover:-translate-y-0.5 active:scale-95 transition-all flex items-center justify-center"
             aria-label={reservationBar.searchAria}
           >
-            {loading ? <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white" /> : <Search size={24} />}
+            {loading ? <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-brand-600" /> : <Search size={24} />}
           </button>
         </div>
       </div>
@@ -567,17 +567,17 @@ function DateInputCard({ id, label, helper, value, onChange, locale }: DateInput
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className={`w-full h-full flex items-center gap-4 rounded-2xl border transition-all duration-300 px-4 text-left min-w-0 ${isFilled || open
-          ? 'bg-white border-brand-100 shadow-sm ring-1 ring-brand-100'
-          : 'bg-brand-50/50 border-transparent hover:bg-brand-50 hover:border-brand-100'
+        className={`w-full h-full flex items-center gap-4 rounded-2xl border-2 border-brand-500 transition-all duration-300 px-4 text-left min-w-0 ${isFilled || open
+          ? 'bg-white shadow-sm ring-1 ring-brand-100'
+          : 'bg-white hover:bg-brand-50/50 shadow-sm'
           }`}
       >
-        <div className={`p-2 rounded-full transition-colors ${isFilled || open ? 'bg-brand-100 text-brand-600' : 'bg-white text-slate-400 shadow-sm'}`}>
+        <div className={`p-2 rounded-full transition-colors bg-brand-100 text-brand-600`}>
           <Calendar size={18} />
         </div>
         <div className="flex flex-col min-w-0 leading-tight">
-          <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase group-hover:text-brand-600 transition-colors">{label}</span>
-          <span className={`text-sm font-semibold ${isFilled ? 'text-slate-900' : 'text-slate-500'}`}>{displayDate || helper}</span>
+          <span className="text-[10px] font-bold tracking-wider text-brand-500 uppercase transition-colors">{label}</span>
+          <span className={`text-sm font-semibold ${isFilled ? 'text-slate-900' : 'text-slate-600'}`}>{displayDate || helper}</span>
           {isFilled && (
             <span className="text-xs font-semibold text-slate-500">{displayTime}</span>
           )}
@@ -611,8 +611,8 @@ function DateInputCard({ id, label, helper, value, onChange, locale }: DateInput
                       key={d}
                       onClick={() => handleDateSelect(d)}
                       className={`h-9 w-9 rounded-full flex items-center justify-center text-sm font-semibold transition-all ${isSelected
-                          ? 'bg-brand-600 text-white shadow-md shadow-brand-500/30'
-                          : 'text-slate-700 hover:bg-brand-50 hover:text-brand-600'
+                        ? 'bg-brand-600 text-white shadow-md shadow-brand-500/30'
+                        : 'text-slate-700 hover:bg-brand-50 hover:text-brand-600'
                         }`}
                     >
                       {d}
@@ -638,8 +638,8 @@ function DateInputCard({ id, label, helper, value, onChange, locale }: DateInput
                       key={t}
                       onClick={() => handleTimeSelect(t)}
                       className={`py-2 rounded-xl text-sm font-semibold transition-all ${selectedTimeStr === t
-                          ? 'bg-brand-600 text-white shadow-md'
-                          : 'bg-slate-50 text-slate-600 hover:bg-brand-50 hover:text-brand-600'
+                        ? 'bg-brand-600 text-white shadow-md'
+                        : 'bg-slate-50 text-slate-600 hover:bg-brand-50 hover:text-brand-600'
                         }`}
                     >
                       {t}

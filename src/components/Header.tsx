@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Instagram, Menu, X, type LucideProps } from 'lucide-react';
+import { Instagram, Menu, X, type LucideProps, ChevronDown, Globe } from 'lucide-react';
 import { useEffect, useRef, useState, type ComponentType, type MouseEvent as ReactMouseEvent } from 'react';
-import logoImage from '../images/kırmızıgettransfer.jpg';
+import logoImage from '../images/image.png';
 import { useLanguage, type NavKey, type LanguageOption } from '../context/LanguageContext';
 import WhatsAppIcon from './icons/WhatsAppIcon';
 
@@ -138,29 +138,33 @@ export default function Header() {
       <nav className="page-shell">
         <div className="flex justify-between items-center h-20">
           <Link to="/" className="flex items-center space-x-3 group relative z-10">
-            <div className="relative">
-              <div className="absolute inset-0 bg-brand-500 blur-xl opacity-20 group-hover:opacity-40 transition-opacity rounded-full" />
+            <div className="relative h-16 w-20 rounded-2xl bg-white shadow-md flex items-center justify-center overflow-hidden border border-slate-200/50">
               <img
                 src={logoImage}
                 alt="GetTransfer İstanbul Logo"
-                className="relative h-11 w-11 object-cover rounded-2xl border border-white/60 shadow-lg shadow-brand-900/5 transition-transform group-hover:scale-105 group-hover:-rotate-3"
+                className="h-[125%] w-[125%] object-contain mix-blend-multiply"
               />
             </div>
-            <div className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
-              GetTransfer <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-brand-400">İstanbul</span>
+            <div className="leading-tight">
+              <div className="font-heading text-xl font-bold text-slate-900 tracking-tight">
+                GetTransfer
+              </div>
+              <div className="text-[11px] font-semibold tracking-[0.24em] uppercase text-slate-400">
+                İstanbul · Türkiye
+              </div>
             </div>
           </Link>
 
           <div className="hidden md:flex items-center space-x-8">
-            <div className="flex items-center space-x-1 bg-white/40 p-1.5 rounded-full border border-white/40 backdrop-blur-sm">
+            <div className="flex items-center p-1.5 rounded-full bg-white/70 backdrop-blur-md border border-white/60 shadow-lg shadow-slate-200/40 ring-1 ring-white/50">
               {navLinks.map((link) => (
                 <Link
                   key={link.to}
                   to={link.to}
                   onClick={(event) => handleNavClick(event, link)}
-                  className={`relative px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300 ${isLinkActive(link)
-                      ? 'bg-white text-brand-600 shadow-sm'
-                      : 'text-slate-600 hover:text-brand-600 hover:bg-white/50'
+                  className={`relative px-5 py-2.5 text-sm font-bold rounded-full transition-all duration-300 ${isLinkActive(link)
+                    ? 'bg-gradient-to-r from-brand-600 to-brand-500 text-white shadow-lg shadow-brand-500/30 scale-105'
+                    : 'text-slate-500 hover:text-brand-600 hover:bg-brand-50/50'
                     }`}
                 >
                   {header.nav[link.key]}
@@ -196,7 +200,7 @@ export default function Header() {
 
               <div className="relative" ref={languageDropdownRef}>
                 <button
-                  className="flex items-center space-x-2 px-2 py-1.5 rounded-full hover:bg-slate-100 transition-colors"
+                  className="flex items-center gap-2 px-3 py-2 rounded-full bg-white/50 hover:bg-white border border-white/60 hover:border-brand-200 transition-all shadow-sm hover:shadow-md active:scale-95 group"
                   onClick={() => setLanguageMenuOpen((open) => !open)}
                   aria-haspopup="true"
                   aria-expanded={languageMenuOpen}
@@ -204,8 +208,15 @@ export default function Header() {
                   <img
                     src={selectedLanguage.flag}
                     alt={`${selectedLanguage.name} flag`}
-                    className="h-6 w-6 rounded-full object-cover shadow-sm ring-2 ring-white"
+                    className="h-5 w-5 rounded-full object-cover shadow-sm ring-1 ring-white/50"
                     loading="lazy"
+                  />
+                  <span className="text-sm font-semibold text-slate-700 group-hover:text-brand-700">
+                    {selectedLanguage.code.toUpperCase()}
+                  </span>
+                  <ChevronDown
+                    size={14}
+                    className={`text-slate-400 group-hover:text-brand-500 transition-transform duration-300 ${languageMenuOpen ? 'rotate-180' : ''}`}
                   />
                 </button>
 
@@ -216,8 +227,8 @@ export default function Header() {
                         key={language.code}
                         onClick={() => handleLanguageSelect(language)}
                         className={`flex items-center w-full px-3 py-2.5 space-x-3 text-left text-sm rounded-xl transition-all ${selectedLanguage.code === language.code
-                            ? 'bg-brand-50 text-brand-700 font-medium'
-                            : 'text-slate-600 hover:bg-slate-50'
+                          ? 'bg-brand-50 text-brand-700 font-medium'
+                          : 'text-slate-600 hover:bg-slate-50'
                           }`}
                       >
                         <img
@@ -290,8 +301,8 @@ export default function Header() {
                     key={language.code}
                     onClick={() => handleLanguageSelect(language)}
                     className={`flex items-center justify-start space-x-2 rounded-xl border px-3 py-2 text-sm transition-colors ${selectedLanguage.code === language.code
-                        ? 'border-brand-200 text-brand-600 bg-brand-50/70'
-                        : 'border-slate-200 text-slate-700 hover:border-brand-200'
+                      ? 'border-brand-200 text-brand-600 bg-brand-50/70'
+                      : 'border-slate-200 text-slate-700 hover:border-brand-200'
                       }`}
                   >
                     <img

@@ -1,5 +1,6 @@
 import { Users, Award, Clock, Shield } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import professionalTransferImg from '../assets/professional-transfer.png';
 
 const statIcons = [Users, Award, Clock, Shield] as const;
 
@@ -46,7 +47,7 @@ export default function About() {
             <div className="relative">
               <div className="absolute -top-10 -left-6 h-64 w-64 rounded-full bg-brand-500/10 blur-3xl" aria-hidden />
               <img
-                src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=800&auto=format&fit=crop"
+                src={professionalTransferImg}
                 alt={about.title}
                 className="relative rounded-[36px] border border-white/70 shadow-[0_45px_90px_rgba(15,23,42,0.2)] object-cover"
               />

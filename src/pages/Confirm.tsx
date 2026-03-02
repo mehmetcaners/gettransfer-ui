@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useBooking } from '../context/BookingContext';
-import { CheckCircle, Home, Search, Loader2, AlertTriangle, FileDown, Clock } from 'lucide-react';
+import { CheckCircle, Home, Search, AlertTriangle, FileDown, Clock } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { buildVoucherUrl, confirmBooking } from '../lib/api';
 
@@ -77,38 +77,37 @@ export default function Confirm() {
         ? 'Rezervasyonunuz Onaylandı'
         : status === 'pending'
           ? 'Rezervasyonunuz Alındı'
-          : 'Onaylanıyor';
+          : 'Onaylandı';
 
   const description =
     status === 'error'
       ? errorMessage ?? 'Onay bağlantısı geçersiz veya süresi dolmuş olabilir.'
       : status === 'success'
-        ? 'Rezervasyonunuz başarıyla onaylandı. Voucher’ı indirip sürücüye gösterebilirsiniz.'
+        ? 'Rezervasyonunuz başarıyla onaylandı. PDF\'i indirip sürücüye gösterebilirsiniz.'
         : status === 'pending'
           ? 'Rezervasyon talebiniz alındı. Onay linki ile doğrulama yapıldığında tamamlanacaktır.'
-          : 'Rezervasyonunuz onaylanıyor, lütfen bekleyin...';
+          : 'Rezervasyonunuz onaylandı.';
 
   const referenceToShow = bookingData?.pnrCode ?? bookingReference ?? bookingId;
 
   return (
-    <div className="min-h-screen py-16 px-4 flex items-center justify-center">
-      <div className="page-shell max-w-2xl">
-        <div className="relative overflow-hidden rounded-[40px] border border-white/70 bg-white/80 backdrop-blur-2xl shadow-[0_45px_90px_rgba(15,23,42,0.15)] p-8 md:p-12 text-center">
+    <div className="min-h-screen py-16 px-2 sm:px-4 flex items-center justify-center">
+      <div className="page-shell max-w-5xl w-full">
+        <div className="relative overflow-hidden rounded-[32px] sm:rounded-[40px] border border-white/70 bg-white/80 backdrop-blur-2xl shadow-[0_45px_90px_rgba(15,23,42,0.15)] p-5 sm:p-8 md:p-10 text-center">
           <div
-            className={`mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full ${
-              status === 'error'
-                ? 'bg-red-100 text-red-600'
-                : status === 'success'
-                  ? 'bg-emerald-100 text-emerald-600'
-                  : status === 'pending'
-                    ? 'bg-amber-100 text-amber-600'
-                    : 'bg-blue-100 text-blue-600'
-            }`}
+            className={`mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full ${status === 'error'
+              ? 'bg-red-100 text-red-600'
+              : status === 'success'
+                ? 'bg-emerald-100 text-emerald-600'
+                : status === 'pending'
+                  ? 'bg-amber-100 text-amber-600'
+                  : 'bg-blue-100 text-blue-600'
+              }`}
           >
             {status === 'error' && <AlertTriangle size={56} />}
             {status === 'success' && <CheckCircle size={56} />}
             {status === 'pending' && <Clock size={56} />}
-            {status === 'loading' && <Loader2 size={56} className="animate-spin" />}
+            {status === 'loading' && <CheckCircle size={56} />}
           </div>
           <h1 className="text-3xl md:text-4xl font-heading font-semibold text-slate-900 mb-4">{headline}</h1>
           <p className="text-lg text-slate-600 mb-8">{description}</p>
@@ -132,7 +131,7 @@ export default function Confirm() {
             <div className="rounded-3xl border border-brand-500/30 bg-brand-500/5 p-5 mb-6 text-left flex flex-col gap-3">
               <div className="flex items-center justify-between gap-3">
                 <div>
-                  <p className="font-semibold text-slate-900">Voucher PDF</p>
+                  <p className="font-semibold text-slate-900">Rezervasyon PDF</p>
                   <p className="text-sm text-slate-600">
                     Rezervasyon detayları PDF olarak indirilebilir. Sürücüye ibraz edebilirsiniz.
                   </p>
@@ -149,7 +148,7 @@ export default function Confirm() {
                   className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-brand-500 to-brand-600 text-white font-semibold shadow-glow hover:-translate-y-0.5 active:scale-95 transition-all"
                 >
                   <FileDown size={18} />
-                  <span>Voucher indir</span>
+                  <span>PDF İndir</span>
                 </a>
                 <a
                   href={`https://wa.me/?text=${encodeURIComponent(voucherUrl)}`}

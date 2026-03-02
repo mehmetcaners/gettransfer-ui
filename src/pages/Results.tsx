@@ -122,11 +122,24 @@ type SortKey = 'recommended' | 'cheapest' | 'spacious' | 'vip';
 
 export default function Results() {
   const navigate = useNavigate();
-  const { searchParams, searchResults, setSelectedVehicle } = useBooking();
+  const { searchParams, searchResults, searchSummary, setSelectedVehicle } = useBooking();
   const { dictionary, locale } = useLanguage();
   const tripBadge = searchParams?.roundTrip ? 'Gidiş-Dönüş' : 'Tek Yön';
-  const currencyOptions: Array<'GBP' | 'EUR' | 'USD' | 'TRY'> = ['GBP', 'EUR', 'USD', 'TRY'];
-  const [selectedCurrency, setSelectedCurrency] = useState<'GBP' | 'EUR' | 'USD' | 'TRY'>(currencyOptions[0]);
+  const availableCurrencies = useMemo(() => {
+    const set = new Set<string>();
+    (searchResults ?? []).forEach((item) => {
+      if (item.currency) {
+        set.add(item.currency.toUpperCase());
+      }
+    });
+    if (set.size === 0 && defaultCurrency) {
+      set.add(defaultCurrency);
+    }
+    return Array.from(set);
+  }, [searchResults]);
+  const [selectedCurrency, setSelectedCurrency] = useState<string>(
+    availableCurrencies[0] ?? defaultCurrency ?? 'EUR',
+  );
   const [sortKey, setSortKey] = useState<SortKey>('recommended');
 
   useEffect(() => {
@@ -134,6 +147,13 @@ export default function Results() {
       navigate('/');
     }
   }, [searchParams, navigate]);
+
+  useEffect(() => {
+    if (!availableCurrencies.length) return;
+    if (!availableCurrencies.includes(selectedCurrency)) {
+      setSelectedCurrency(availableCurrencies[0]);
+    }
+  }, [availableCurrencies, selectedCurrency]);
 
   if (!searchParams) {
     return null;
@@ -257,6 +277,16 @@ export default function Results() {
               />
             </div>
 
+            {searchSummary?.distanceKm !== undefined && (
+              <div className="grid gap-4 md:grid-cols-2">
+                <DetailCard
+                  icon={<MapPin size={18} className="text-brand-600" />}
+                  title={dictionary.results.labels.distance}
+                  value={`${searchSummary.distanceKm.toFixed(1)} km`}
+                />
+              </div>
+            )}
+
             {searchParams.roundTrip && searchParams.returnDatetime && (
               <div className="grid gap-4">
                 <DetailCard
@@ -290,24 +320,26 @@ export default function Results() {
                 {key === 'vip' && 'En VIP'}
               </button>
             ))}
-            <div className="flex items-center gap-2 ml-auto">
-              <Sparkles size={18} className="text-brand-600" />
-              <span className="text-sm font-semibold text-slate-700">Para birimi:</span>
-              <div className="flex rounded-full border border-white/70 bg-white shadow-inner shadow-slate-900/5 overflow-hidden">
-                {currencyOptions.map((cur) => (
-                  <button
-                    key={cur}
-                    type="button"
-                    onClick={() => setSelectedCurrency(cur)}
-                    className={`px-3 py-1.5 text-sm font-semibold transition ${
-                      selectedCurrency === cur ? 'bg-brand-500 text-white' : 'text-slate-600 hover:text-brand-600'
-                    }`}
-                  >
-                    {cur}
-                  </button>
-                ))}
+            {availableCurrencies.length > 1 && (
+              <div className="flex items-center gap-2 ml-auto">
+                <Sparkles size={18} className="text-brand-600" />
+                <span className="text-sm font-semibold text-slate-700">Para birimi:</span>
+                <div className="flex rounded-full border border-white/70 bg-white shadow-inner shadow-slate-900/5 overflow-hidden">
+                  {availableCurrencies.map((cur) => (
+                    <button
+                      key={cur}
+                      type="button"
+                      onClick={() => setSelectedCurrency(cur)}
+                      className={`px-3 py-1.5 text-sm font-semibold transition ${
+                        selectedCurrency === cur ? 'bg-brand-500 text-white' : 'text-slate-600 hover:text-brand-600'
+                      }`}
+                    >
+                      {cur}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           <h1 className="text-3xl font-heading font-semibold text-slate-900 mb-6">

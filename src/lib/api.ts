@@ -27,7 +27,6 @@ export interface SearchResult {
   currency: string;
   imageUrl?: string;
   vehicleTypeId?: string | number;
-  categoryId?: number;
   seats?: number;
   bags?: number;
   routeUrl?: string;
@@ -143,11 +142,10 @@ function normaliseSearchResponse(payload: unknown): SearchResponse {
       const currency = String((raw.currency ?? defaultCurrency ?? 'TRY') as string).toUpperCase();
       const vehicleName = String((raw.vehicle_type ?? raw.name ?? 'Transfer') as string);
       const vehicleTypeId = (raw.vehicle_type_id ?? raw.vehicleTypeId ?? raw.vehicleId) as string | number | undefined;
-      const categoryId = (raw.category_id ?? raw.categoryId) as number | undefined;
       const imageUrl = (raw.image_url ?? raw.imageUrl) as string | undefined;
       const routeUrl = typeof raw.route_url === 'string' ? raw.route_url : undefined;
 
-      const idParts = [vehicleTypeId, currency, categoryId].filter(Boolean).map(String);
+      const idParts = [vehicleTypeId, currency].filter(Boolean).map(String);
       const id = idParts.length ? idParts.join('-') : safeId();
 
       return {
@@ -160,7 +158,6 @@ function normaliseSearchResponse(payload: unknown): SearchResponse {
         currency,
         imageUrl,
         vehicleTypeId,
-        categoryId,
         seats: passengers,
         bags: luggage,
         routeUrl,
@@ -176,10 +173,18 @@ function normaliseSearchResponse(payload: unknown): SearchResponse {
     })
     .filter(Boolean) as SearchResult[];
 
+  const distanceKm = toNumber(container.distance_km ?? container.distanceKm);
+  const durationMin =
+    toNumber(container.duration_min ?? container.durationMin) ??
+    (() => {
+      const seconds = toNumber(container.duration_seconds ?? container.durationSeconds);
+      return seconds !== undefined ? Math.round(seconds / 60) : undefined;
+    })();
+
   return {
     results,
-    distanceKm: toNumber(container.distance_km ?? container.distanceKm),
-    durationMin: toNumber(container.duration_min ?? container.durationMin),
+    distanceKm,
+    durationMin,
   };
 }
 
