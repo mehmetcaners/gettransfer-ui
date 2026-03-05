@@ -1,27 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, MapPin, Calendar, Users, ArrowLeftRight, Minus, Plus, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, MapPin, Calendar, Users, ArrowLeftRight, Minus, Plus, Clock, ChevronLeft, ChevronRight, Car } from 'lucide-react';
 import { useBooking, type SearchParams } from '../context/BookingContext';
 import { useLanguage } from '../context/LanguageContext';
 import { fetchPlaceSuggestions, searchTransfers, type PlaceSelection, type PlaceSuggestion } from '../lib/api';
 
 type Tab = 'transfer' | 'hourly' | 'tours';
-const tabKeys: Tab[] = ['transfer', 'hourly', 'tours'];
 
 type ReservationBarProps = {
   activeTab?: Tab;
   onTabChange?: (tab: Tab) => void;
-};
-
-const formatDisplayDateTime = (value: string, locale: string) => {
-  if (!value) return '';
-  const parsed = new Date(value);
-  if (Number.isNaN(parsed.getTime())) return '';
-  try {
-    return parsed.toLocaleString(locale || 'tr-TR', { dateStyle: 'medium', timeStyle: 'short' });
-  } catch {
-    return parsed.toLocaleString();
-  }
 };
 
 export default function ReservationBar({ activeTab: controlledTab, onTabChange }: ReservationBarProps = {}) {
@@ -161,252 +149,260 @@ export default function ReservationBar({ activeTab: controlledTab, onTabChange }
     return () => document.removeEventListener('mousedown', closeOnClickOutside);
   }, []);
 
+  const renderTabs = () => (
+    <div className="flex bg-white shadow-md rounded-2xl w-fit p-1.5 gap-1 mb-3">
+      <TabButton icon={<Car size={18} />} active={activeTab === 'transfer'} onClick={() => handleTabChange('transfer')}>
+        {reservationBar.tabs['transfer']}
+      </TabButton>
+      <TabButton icon={<Clock size={18} />} active={activeTab === 'hourly'} onClick={() => handleTabChange('hourly')}>
+        {reservationBar.tabs['hourly']}
+      </TabButton>
+      <TabButton icon={<MapPin size={18} />} active={activeTab === 'tours'} onClick={() => handleTabChange('tours')}>
+        {reservationBar.tabs['tours']}
+      </TabButton>
+    </div>
+  );
+
   if (activeTab !== 'transfer') {
     return (
-      <div className="glass-panel p-8 rounded-[48px]">
-        <div className="flex border-b border-brand-100 mb-8 overflow-x-auto pb-2">
-          {tabKeys.map((key) => (
-            <TabButton key={key} active={activeTab === key} onClick={() => handleTabChange(key)}>
-              {reservationBar.tabs[key]}
-            </TabButton>
-          ))}
-        </div>
-        <div className="text-center py-16">
-          <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-brand-50 text-brand-300 mb-4">
-            <Search size={32} className="opacity-50" />
+      <div className="flex flex-col">
+        {renderTabs()}
+        <div className="bg-white p-8 rounded-3xl shadow-xl">
+          <div className="text-center py-16">
+            <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-brand-50 text-brand-300 mb-4">
+              <Search size={32} className="opacity-50" />
+            </div>
+            <p className="text-lg text-brand-900/60 font-medium">{reservationBar.comingSoon}</p>
           </div>
-          <p className="text-lg text-brand-900/60 font-medium">{reservationBar.comingSoon}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div
-      className={`relative rounded-[48px] bg-white/90 backdrop-blur-xl border border-white/60 shadow-glass p-6 md:p-8 transition-all duration-500 ${error ? 'animate-shake ring-2 ring-red-400/50' : ''
-        }`}
-    >
-      <div className="relative flex flex-wrap gap-2 md:gap-4 border-b border-slate-100 pb-6 mb-8">
-        {tabKeys.map((key) => (
-          <TabButton key={key} active={activeTab === key} onClick={() => handleTabChange(key)}>
-            {reservationBar.tabs[key]}
-          </TabButton>
-        ))}
-      </div>
+    <div className="flex flex-col">
+      {renderTabs()}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-5">
-        <div className="lg:col-span-3 relative group">
-          <label htmlFor="from" className="sr-only">
-            {reservationBar.placeholders.from}
-          </label>
-          <div className={`absolute inset-0 bg-white rounded-2xl border-2 border-brand-500 transition-all duration-300 ${activeField === 'from' ? 'ring-2 ring-brand-100' : ''}`} />
-          <MapPin className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 text-brand-600`} size={20} />
-          <input
-            id="from"
-            type="text"
-            placeholder={reservationBar.placeholders.from}
-            value={fromInput}
-            onChange={(e) => {
-              setFromInput(e.target.value);
-              setFromSelection(null);
-            }}
-            autoComplete="off"
-            onFocus={() => setActiveField('from')}
-            onBlur={() => setTimeout(() => setActiveField((prev) => (prev === 'from' ? null : prev)), 150)}
-            className={`relative bg-transparent w-full h-16 pl-12 pr-4 rounded-2xl text-slate-900 placeholder:text-slate-500 font-medium focus:outline-none transition-all`}
-          />
-          {activeField === 'from' && fromSuggestions.length > 0 && (
-            <SuggestionList
-              suggestions={fromSuggestions}
-              onSelect={(suggestion) => {
-                const label = suggestion.description || suggestion.mainText;
-                setFromSelection({ placeId: suggestion.placeId, description: label });
-                setFromInput(label);
-                setFromSuggestions([]);
-                setActiveField(null);
-              }}
-            />
-          )}
-        </div>
+      <div
+        className={`relative rounded-3xl bg-white shadow-2xl p-6 md:p-8 transition-all duration-500 ${error ? 'animate-shake ring-2 ring-red-400/50' : ''
+          }`}
+      >
 
-        <div className="lg:col-span-1 flex items-center justify-center">
-          <button
-            onClick={handleSwap}
-            className="p-4 rounded-2xl bg-brand-50/30 text-brand-400 hover:bg-brand-50 hover:text-brand-600 hover:rotate-180 transition-all duration-500 shadow-sm"
-            aria-label={reservationBar.swapAria}
-          >
-            <ArrowLeftRight size={20} />
-          </button>
-        </div>
-
-        <div className="lg:col-span-3 relative group">
-          <label htmlFor="to" className="sr-only">
-            {reservationBar.placeholders.to}
-          </label>
-          <div className={`absolute inset-0 bg-white rounded-2xl border-2 border-brand-500 transition-all duration-300 ${activeField === 'to' ? 'ring-2 ring-brand-100' : ''}`} />
-          <MapPin className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 text-brand-600`} size={20} />
-          <input
-            id="to"
-            type="text"
-            placeholder={reservationBar.placeholders.to}
-            value={toInput}
-            onChange={(e) => {
-              setToInput(e.target.value);
-              setToSelection(null);
-            }}
-            autoComplete="off"
-            onFocus={() => setActiveField('to')}
-            onBlur={() => setTimeout(() => setActiveField((prev) => (prev === 'to' ? null : prev)), 150)}
-            className={`relative bg-transparent w-full h-16 pl-12 pr-4 rounded-2xl text-slate-900 placeholder:text-slate-500 font-medium focus:outline-none transition-all`}
-          />
-          {activeField === 'to' && toSuggestions.length > 0 && (
-            <SuggestionList
-              suggestions={toSuggestions}
-              onSelect={(suggestion) => {
-                const label = suggestion.description || suggestion.mainText;
-                setToSelection({ placeId: suggestion.placeId, description: label });
-                setToInput(label);
-                setToSuggestions([]);
-                setActiveField(null);
-              }}
-            />
-          )}
-        </div>
-
-        <div className="lg:col-span-2">
-          <DateInputCard
-            id="datetime"
-            label="TARİH & SAAT"
-            helper="Seçiniz"
-            value={datetime}
-            onChange={(value) => setDatetime(value)}
-            locale={locale}
-          />
-        </div>
-
-        <div className="lg:col-span-2">
-          <div ref={passengerRef} className="relative h-full">
-            <label className="sr-only" htmlFor="passenger-btn">
-              {dictionary.vehicles.passengersLabel}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-5">
+          <div className="lg:col-span-3 relative group">
+            <label htmlFor="from" className="sr-only">
+              {reservationBar.placeholders.from}
             </label>
-            <button
-              id="passenger-btn"
-              type="button"
-              onClick={() => setPassengerOpen((open) => !open)}
-              className="w-full h-16 rounded-2xl bg-white hover:bg-brand-50/50 border-2 border-brand-500 flex items-center justify-between px-4 transition-all duration-300 group ring-inset focus:ring-2 focus:ring-brand-200 shadow-sm"
-              aria-haspopup="true"
-              aria-expanded={passengerOpen}
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 shadow-sm">
-                  <Users size={16} />
-                </div>
-                <div className="flex flex-col items-start">
-                  <span className="text-[10px] font-bold tracking-wider text-brand-500 uppercase transition-colors">YOLCU</span>
-                  <span className="font-semibold text-lg text-slate-900">{passengers} Kişi</span>
-                </div>
-              </div>
-            </button>
+            <div className={`absolute inset-0 bg-white rounded-2xl border-2 border-brand-500 transition-all duration-300 ${activeField === 'from' ? 'ring-2 ring-brand-100' : ''}`} />
+            <MapPin className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 text-brand-600`} size={20} />
+            <input
+              id="from"
+              type="text"
+              placeholder={reservationBar.placeholders.from}
+              value={fromInput}
+              onChange={(e) => {
+                setFromInput(e.target.value);
+                setFromSelection(null);
+              }}
+              autoComplete="off"
+              onFocus={() => setActiveField('from')}
+              onBlur={() => setTimeout(() => setActiveField((prev) => (prev === 'from' ? null : prev)), 150)}
+              className={`relative bg-transparent w-full h-16 pl-12 pr-4 rounded-2xl text-slate-900 placeholder:text-slate-500 font-medium focus:outline-none transition-all`}
+            />
+            {activeField === 'from' && fromSuggestions.length > 0 && (
+              <SuggestionList
+                suggestions={fromSuggestions}
+                onSelect={(suggestion) => {
+                  const label = suggestion.description || suggestion.mainText;
+                  setFromSelection({ placeId: suggestion.placeId, description: label });
+                  setFromInput(label);
+                  setFromSuggestions([]);
+                  setActiveField(null);
+                }}
+              />
+            )}
+          </div>
 
-            {passengerOpen && (
-              <div className="absolute right-0 top-full mt-2 w-72 rounded-3xl border border-brand-100 bg-white shadow-xl shadow-brand-900/10 p-4 z-40 animate-scale-in">
-                <div className="flex items-center justify-between p-2">
-                  <span className="font-medium text-slate-600">Yolcu Sayısı</span>
-                  <div className="flex items-center gap-3">
+          <div className="lg:col-span-1 flex items-center justify-center">
+            <button
+              onClick={handleSwap}
+              className="p-4 rounded-2xl bg-brand-50/30 text-brand-400 hover:bg-brand-50 hover:text-brand-600 hover:rotate-180 transition-all duration-500 shadow-sm"
+              aria-label={reservationBar.swapAria}
+            >
+              <ArrowLeftRight size={20} />
+            </button>
+          </div>
+
+          <div className="lg:col-span-3 relative group">
+            <label htmlFor="to" className="sr-only">
+              {reservationBar.placeholders.to}
+            </label>
+            <div className={`absolute inset-0 bg-white rounded-2xl border-2 border-brand-500 transition-all duration-300 ${activeField === 'to' ? 'ring-2 ring-brand-100' : ''}`} />
+            <MapPin className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 text-brand-600`} size={20} />
+            <input
+              id="to"
+              type="text"
+              placeholder={reservationBar.placeholders.to}
+              value={toInput}
+              onChange={(e) => {
+                setToInput(e.target.value);
+                setToSelection(null);
+              }}
+              autoComplete="off"
+              onFocus={() => setActiveField('to')}
+              onBlur={() => setTimeout(() => setActiveField((prev) => (prev === 'to' ? null : prev)), 150)}
+              className={`relative bg-transparent w-full h-16 pl-12 pr-4 rounded-2xl text-slate-900 placeholder:text-slate-500 font-medium focus:outline-none transition-all`}
+            />
+            {activeField === 'to' && toSuggestions.length > 0 && (
+              <SuggestionList
+                suggestions={toSuggestions}
+                onSelect={(suggestion) => {
+                  const label = suggestion.description || suggestion.mainText;
+                  setToSelection({ placeId: suggestion.placeId, description: label });
+                  setToInput(label);
+                  setToSuggestions([]);
+                  setActiveField(null);
+                }}
+              />
+            )}
+          </div>
+
+          <div className="lg:col-span-2">
+            <DateInputCard
+              id="datetime"
+              label="TARİH & SAAT"
+              helper="Seçiniz"
+              value={datetime}
+              onChange={(value) => setDatetime(value)}
+              locale={locale}
+            />
+          </div>
+
+          <div className="lg:col-span-2">
+            <div ref={passengerRef} className="relative h-full">
+              <label className="sr-only" htmlFor="passenger-btn">
+                {dictionary.vehicles.passengersLabel}
+              </label>
+              <button
+                id="passenger-btn"
+                type="button"
+                onClick={() => setPassengerOpen((open) => !open)}
+                className="w-full h-16 rounded-2xl bg-white hover:bg-brand-50/50 border-2 border-brand-500 flex items-center justify-between px-4 transition-all duration-300 group ring-inset focus:ring-2 focus:ring-brand-200 shadow-sm"
+                aria-haspopup="true"
+                aria-expanded={passengerOpen}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 shadow-sm">
+                    <Users size={16} />
+                  </div>
+                  <div className="flex flex-col items-start">
+                    <span className="text-[10px] font-bold tracking-wider text-brand-500 uppercase transition-colors">YOLCU</span>
+                    <span className="font-semibold text-lg text-slate-900">{passengers} Kişi</span>
+                  </div>
+                </div>
+              </button>
+
+              {passengerOpen && (
+                <div className="absolute right-0 top-full mt-2 w-72 rounded-3xl border border-brand-100 bg-white shadow-xl shadow-brand-900/10 p-4 z-40 animate-scale-in">
+                  <div className="flex items-center justify-between p-2">
+                    <span className="font-medium text-slate-600">Yolcu Sayısı</span>
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setPassengers(p => Math.max(1, p - 1))}
+                        disabled={passengers <= 1}
+                        className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-600 hover:border-brand-500 hover:text-brand-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                      >
+                        <Minus size={18} />
+                      </button>
+                      <span className="w-8 text-center font-bold text-lg text-slate-900">{passengers}</span>
+                      <button
+                        type="button"
+                        onClick={() => setPassengers(p => Math.min(16, p + 1))}
+                        disabled={passengers >= 16}
+                        className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-600 hover:border-brand-500 hover:text-brand-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                      >
+                        <Plus size={18} />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="mt-2 pt-2 border-t border-slate-100 text-center">
                     <button
-                      type="button"
-                      onClick={() => setPassengers(p => Math.max(1, p - 1))}
-                      disabled={passengers <= 1}
-                      className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-600 hover:border-brand-500 hover:text-brand-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                      onClick={() => setPassengerOpen(false)}
+                      className="text-xs font-bold text-brand-600 hover:text-brand-700 uppercase tracking-widest py-2"
                     >
-                      <Minus size={18} />
-                    </button>
-                    <span className="w-8 text-center font-bold text-lg text-slate-900">{passengers}</span>
-                    <button
-                      type="button"
-                      onClick={() => setPassengers(p => Math.min(16, p + 1))}
-                      disabled={passengers >= 16}
-                      className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-600 hover:border-brand-500 hover:text-brand-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-                    >
-                      <Plus size={18} />
+                      Tamam
                     </button>
                   </div>
                 </div>
-                <div className="mt-2 pt-2 border-t border-slate-100 text-center">
-                  <button
-                    onClick={() => setPassengerOpen(false)}
-                    className="text-xs font-bold text-brand-600 hover:text-brand-700 uppercase tracking-widest py-2"
-                  >
-                    Tamam
-                  </button>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
+          </div>
+
+          <div className="lg:col-span-1">
+            <button
+              onClick={handleSearch}
+              disabled={loading}
+              className="w-full h-16 rounded-2xl bg-white border-2 border-brand-500 text-brand-600 font-semibold shadow-sm hover:bg-brand-50/50 hover:-translate-y-0.5 active:scale-95 transition-all flex items-center justify-center"
+              aria-label={reservationBar.searchAria}
+            >
+              {loading ? <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-brand-600" /> : <Search size={24} />}
+            </button>
           </div>
         </div>
 
-        <div className="lg:col-span-1">
-          <button
-            onClick={handleSearch}
-            disabled={loading}
-            className="w-full h-16 rounded-2xl bg-white border-2 border-brand-500 text-brand-600 font-semibold shadow-sm hover:bg-brand-50/50 hover:-translate-y-0.5 active:scale-95 transition-all flex items-center justify-center"
-            aria-label={reservationBar.searchAria}
-          >
-            {loading ? <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-brand-600" /> : <Search size={24} />}
-          </button>
+        <div className="relative z-10 mt-6 flex flex-col gap-4 lg:flex-row lg:items-center">
+          <label className="flex items-center gap-3 cursor-pointer group select-none">
+            <div className="relative">
+              <input
+                type="checkbox"
+                className="peer sr-only"
+                checked={roundTrip}
+                onChange={(e) => setRoundTrip(e.target.checked)}
+              />
+              <div className="h-6 w-11 rounded-full bg-slate-200 peer-checked:bg-brand-500 transition-colors duration-300" />
+              <div className="absolute left-1 top-1 h-4 w-4 rounded-full bg-white transition-transform duration-300 peer-checked:translate-x-5 shadow-sm" />
+            </div>
+            <span className="text-sm font-medium text-slate-600 group-hover:text-brand-600 transition-colors">
+              {reservationBar.roundTrip}
+            </span>
+          </label>
         </div>
-      </div>
 
-      <div className="relative z-10 mt-6 flex flex-col gap-4 lg:flex-row lg:items-center">
-        <label className="flex items-center gap-3 cursor-pointer group select-none">
-          <div className="relative">
-            <input
-              type="checkbox"
-              className="peer sr-only"
-              checked={roundTrip}
-              onChange={(e) => setRoundTrip(e.target.checked)}
+        {roundTrip && (
+          <div className="mt-6 animate-slideDown max-w-sm">
+            <DateInputCard
+              id="returnDatetime"
+              label="DÖNÜŞ TARİHİ"
+              helper={reservationBar.placeholders.returnDatetime}
+              value={returnDatetime}
+              onChange={(value) => setReturnDatetime(value)}
+              locale={locale}
             />
-            <div className="h-6 w-11 rounded-full bg-slate-200 peer-checked:bg-brand-500 transition-colors duration-300" />
-            <div className="absolute left-1 top-1 h-4 w-4 rounded-full bg-white transition-transform duration-300 peer-checked:translate-x-5 shadow-sm" />
           </div>
-          <span className="text-sm font-medium text-slate-600 group-hover:text-brand-600 transition-colors">
-            {reservationBar.roundTrip}
-          </span>
-        </label>
+        )}
+
+        {apiError && (
+          <div className="mt-4 rounded-2xl bg-red-50 border border-red-100 px-4 py-3 text-sm text-red-600 flex items-center gap-2 animate-shake">
+            <div className="w-1.5 h-1.5 rounded-full bg-red-500" />
+            {apiError}
+          </div>
+        )}
       </div>
-
-      {roundTrip && (
-        <div className="mt-6 animate-slideDown max-w-sm">
-          <DateInputCard
-            id="returnDatetime"
-            label="DÖNÜŞ TARİHİ"
-            helper={reservationBar.placeholders.returnDatetime}
-            value={returnDatetime}
-            onChange={(value) => setReturnDatetime(value)}
-            locale={locale}
-          />
-        </div>
-      )}
-
-      {apiError && (
-        <div className="mt-4 rounded-2xl bg-red-50 border border-red-100 px-4 py-3 text-sm text-red-600 flex items-center gap-2 animate-shake">
-          <div className="w-1.5 h-1.5 rounded-full bg-red-500" />
-          {apiError}
-        </div>
-      )}
     </div>
   );
 }
 
-function TabButton({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+function TabButton({ active, onClick, children, icon }: { active: boolean; onClick: () => void; children: React.ReactNode; icon?: React.ReactNode }) {
   return (
     <button
       onClick={onClick}
-      className={`px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all duration-300 ${active
-        ? 'bg-brand-600 text-white shadow-lg shadow-brand-500/25'
-        : 'text-slate-500 hover:text-brand-600 hover:bg-brand-50'
+      className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm tracking-widest transition-all duration-300 ${active
+        ? 'text-brand-600'
+        : 'text-slate-700 hover:text-brand-600 hover:bg-slate-50'
         }`}
     >
+      {icon && <span className={`${active ? 'text-brand-600' : 'text-slate-400'}`}>{icon}</span>}
       {children}
     </button>
   );
@@ -470,7 +466,6 @@ const TIMES = Array.from({ length: 96 }).map((_, i) => {
 function DateInputCard({ id, label, helper, value, onChange, locale }: DateInputCardProps) {
   const [open, setOpen] = useState(false);
   const [view, setView] = useState<'date' | 'time'>('date');
-  const [currentDate, setCurrentDate] = useState(new Date());
 
   // Seçili değerleri parse et
   const selectedDate = value ? new Date(value) : null;
@@ -565,6 +560,7 @@ function DateInputCard({ id, label, helper, value, onChange, locale }: DateInput
   return (
     <div className="relative h-16 w-full group" ref={containerRef}>
       <button
+        id={id}
         type="button"
         onClick={() => setOpen(!open)}
         className={`w-full h-full flex items-center gap-4 rounded-2xl border-2 border-brand-500 transition-all duration-300 px-4 text-left min-w-0 ${isFilled || open

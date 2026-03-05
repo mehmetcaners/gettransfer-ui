@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import ReservationBar from '../components/ReservationBar';
 import Accordion from '../components/Accordion';
 import MapEmbed from '../components/MapEmbed';
-import { Plane, Clock, Shield, Car, MapPin } from 'lucide-react';
+import { Plane, Clock, Shield, Car, MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import heroImage from '../images/anasayfagetteansfer.jpg';
 
@@ -75,80 +75,68 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <section className="relative pt-24 pb-20 md:pt-32 md:pb-24">
-        {/* Abstract Background Elements */}
-        <div className="pointer-events-none absolute inset-0 overflow-hidden -z-10">
-          <div className="absolute top-0 inset-x-0 h-[800px] bg-gradient-to-b from-brand-50/80 to-transparent" />
-          <div className="absolute -top-[200px] -right-[200px] w-[600px] h-[600px] bg-brand-200/30 rounded-full blur-[100px] mix-blend-multiply opacity-70 animate-float" />
-          <div className="absolute top-[100px] -left-[200px] w-[500px] h-[500px] bg-sky-200/30 rounded-full blur-[100px] mix-blend-multiply opacity-70 animate-float" style={{ animationDelay: '2s' }} />
+    <div className="min-h-screen bg-slate-50 relative font-['Inter',sans-serif]">
+      <section className="relative pt-14 pb-3 md:pt-20 md:pb-4 min-h-[52vh] md:min-h-[58vh] flex flex-col justify-start">
+        <div className="absolute inset-0 z-0">
+          <img
+            src={heroImage}
+            alt="Hero Background"
+            className="w-full h-full object-cover object-center"
+          />
         </div>
 
-        <div className="page-shell relative">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className="space-y-8 animate-fade-in-up">
-              <div className="inline-flex items-center gap-2.5 rounded-full border border-brand-200 bg-white/60 backdrop-blur-md px-4 py-1.5 shadow-sm">
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-500"></span>
-                </span>
-                <span className="text-xs font-bold tracking-[0.2em] text-brand-700 uppercase">
-                  {dictionary.home.advantagesTitle}
-                </span>
-              </div>
+        {/* Gradient Overlay for Text Readability - from left white to transparent right */}
+        <div className="absolute inset-0 z-0 bg-gradient-to-r from-white via-white/80 to-transparent sm:via-white/60 sm:to-transparent" />
 
-              <h1 className="text-5xl md:text-6xl xl:text-7xl font-heading font-medium text-slate-900 leading-[1.1] tracking-tight">
-                {dictionary.home.heroTitle}
-              </h1>
+        <div className="page-shell relative z-10 w-full flex flex-col">
+          <div className="max-w-3xl animate-fade-in-up mb-1">
+            <span className="text-[0.7rem] font-bold tracking-[0.16em] text-[#1e293b] uppercase mb-1 block">
+              EKSTRA İNDİRİM.
+            </span>
 
-              <p className="text-lg md:text-xl text-slate-600 max-w-2xl leading-relaxed">
-                {dictionary.home.heroDescription}
-              </p>
+            <h1 className="text-[2.05rem] md:text-[2.8rem] lg:text-[3.2rem] font-[800] text-[#0f172a] leading-[1.08] tracking-[-0.02em]">
+              Gidiş-dönüş rezervasyonu yapın<br />ekstra %10 indirim kazanın.
+            </h1>
 
-              <div className="flex flex-wrap gap-2.5 pt-2">
-                {cities.slice(0, 6).map((city) => (
-                  <span
-                    key={city}
-                    className="px-5 py-2 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600 shadow-sm hover:border-brand-300 hover:text-brand-600 transition-colors cursor-default"
-                  >
-                    {city}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="relative hidden lg:block animate-scale-in">
-              <div className="absolute -inset-4 bg-gradient-to-tr from-brand-500 to-indigo-500 rounded-[48px] opacity-20 blur-2xl" />
-              <img
-                src={heroImage}
-                alt={dictionary.home.heroTitle}
-                className="relative rounded-[40px] border border-white/50 shadow-2xl shadow-brand-900/10 object-cover aspect-[4/3]"
-              />
-
-              {/* Floating Card */}
-              <div className="absolute -left-8 -bottom-8 rounded-3xl bg-white/90 backdrop-blur-xl border border-white/60 shadow-glass p-6 animate-float" style={{ animationDelay: '1.5s' }}>
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-brand-50 flex items-center justify-center text-brand-600">
-                    <Shield size={24} />
-                  </div>
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-0.5">
-                      {dictionary.home.advantages[0]?.title}
-                    </p>
-                    <p className="text-sm font-bold text-slate-900">
-                      {dictionary.home.advantages[0]?.description}
-                    </p>
-                  </div>
-                </div>
-              </div>
+            {/* Circular Arrow Buttons */}
+            <div className="flex gap-3 mt-2">
+              <button
+                className="w-[44px] h-[44px] rounded-full border border-slate-300 flex items-center justify-center text-slate-700 hover:bg-white transition-colors bg-white/40 backdrop-blur-sm"
+                aria-label="Previous"
+              >
+                <ChevronLeft size={18} strokeWidth={2} />
+              </button>
+              <button
+                className="w-[44px] h-[44px] rounded-full border border-slate-300 flex items-center justify-center text-slate-700 hover:bg-white transition-colors bg-white/40 backdrop-blur-sm"
+                aria-label="Next"
+              >
+                <ChevronRight size={18} strokeWidth={2} />
+              </button>
             </div>
           </div>
 
-          <div id="reservation" className="scroll-mt-32 mt-24">
+          <div id="reservation" className="scroll-mt-32 w-full max-w-6xl relative z-20 mt-2 md:mt-4">
             <ReservationBar activeTab={reservationTab} onTabChange={handleReservationTabChange} />
+          </div>
+
+          <div className="mt-2 md:mt-3 text-sm font-semibold text-slate-700 tracking-wide pb-2">
+            Istanbul Airport Transfer
           </div>
         </div>
       </section>
+
+      {/* WhatsApp Floating Button */}
+      <a
+        href="https://wa.me/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-[#25D366] text-white px-5 py-3 rounded-full shadow-lg hover:-translate-y-1 hover:shadow-xl hover:bg-[#20bd5a] transition-all font-semibold"
+      >
+        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 fill-current">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+        </svg>
+        WhatsApp
+      </a>
 
       <section className="py-20">
         <div className="page-shell">
