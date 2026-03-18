@@ -76,51 +76,55 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-slate-50 relative font-['Inter',sans-serif]">
-      <section className="relative pt-14 pb-3 md:pt-20 md:pb-4 min-h-[52vh] md:min-h-[58vh] flex flex-col justify-start">
-        <div className="absolute inset-0 z-0">
-          <img
-            src={heroImage}
-            alt="Hero Background"
-            className="w-full h-full object-cover object-center"
-          />
-        </div>
-
-        {/* Gradient Overlay for Text Readability - from left white to transparent right */}
-        <div className="absolute inset-0 z-0 bg-gradient-to-r from-white via-white/80 to-transparent sm:via-white/60 sm:to-transparent" />
-
-        <div className="page-shell relative z-10 w-full flex flex-col">
-          <div className="max-w-3xl animate-fade-in-up mb-1">
-            <span className="text-[0.7rem] font-bold tracking-[0.16em] text-[#1e293b] uppercase mb-1 block">
-              EKSTRA İNDİRİM.
-            </span>
-
-            <h1 className="text-[2.05rem] md:text-[2.8rem] lg:text-[3.2rem] font-[800] text-[#0f172a] leading-[1.08] tracking-[-0.02em]">
-              Gidiş-dönüş rezervasyonu yapın<br />ekstra %10 indirim kazanın.
-            </h1>
-
-            {/* Circular Arrow Buttons */}
-            <div className="flex gap-3 mt-2">
-              <button
-                className="w-[44px] h-[44px] rounded-full border border-slate-300 flex items-center justify-center text-slate-700 hover:bg-white transition-colors bg-white/40 backdrop-blur-sm"
-                aria-label="Previous"
-              >
-                <ChevronLeft size={18} strokeWidth={2} />
-              </button>
-              <button
-                className="w-[44px] h-[44px] rounded-full border border-slate-300 flex items-center justify-center text-slate-700 hover:bg-white transition-colors bg-white/40 backdrop-blur-sm"
-                aria-label="Next"
-              >
-                <ChevronRight size={18} strokeWidth={2} />
-              </button>
+      <section className="relative pt-14 pb-3 md:pt-20 md:pb-4">
+        <div className="page-shell">
+          <div className="relative min-h-[52vh] md:min-h-[58vh] overflow-hidden rounded-[32px] md:rounded-[40px] bg-[#f7f4ef] shadow-[0_26px_70px_rgba(15,23,42,0.08)]">
+            <div className="absolute inset-0 z-0">
+              <img
+                src={heroImage}
+                alt="Hero Background"
+                className="w-full h-full object-cover object-[72%_center] scale-[1.18] sm:object-[76%_center] sm:scale-[1.14] lg:object-[82%_center] lg:scale-[1.08]"
+              />
             </div>
-          </div>
 
-          <div id="reservation" className="scroll-mt-32 w-full max-w-6xl relative z-20 mt-2 md:mt-4">
-            <ReservationBar activeTab={reservationTab} onTabChange={handleReservationTabChange} />
-          </div>
+            <div className="absolute inset-0 z-0 bg-[linear-gradient(90deg,rgba(250,248,243,0.97)_0%,rgba(250,248,243,0.93)_24%,rgba(250,248,243,0.72)_42%,rgba(250,248,243,0.3)_58%,rgba(250,248,243,0)_74%)]" />
+            <div className="absolute inset-y-0 right-0 z-0 w-[26%] bg-[linear-gradient(270deg,rgba(15,23,42,0.16)_0%,rgba(15,23,42,0)_58%)]" />
 
-          <div className="mt-2 md:mt-3 text-sm font-semibold text-slate-700 tracking-wide pb-2">
-            Istanbul Airport Transfer
+            <div className="page-shell relative z-10 w-full flex min-h-[52vh] md:min-h-[58vh] flex-col justify-start pt-8 pb-6 md:pt-12 md:pb-7">
+              <div className="max-w-3xl animate-fade-in-up mb-1">
+                <span className="text-[0.7rem] font-bold tracking-[0.16em] text-[#1e293b] uppercase mb-1 block">
+                  EKSTRA İNDİRİM.
+                </span>
+
+                <h1 className="text-[2.05rem] md:text-[2.8rem] lg:text-[3.2rem] font-[800] text-[#0f172a] leading-[1.08] tracking-[-0.02em]">
+                  Gidiş-dönüş rezervasyonu yapın<br />ekstra %10 indirim kazanın.
+                </h1>
+
+                {/* Circular Arrow Buttons */}
+                <div className="flex gap-3 mt-2">
+                  <button
+                    className="w-[44px] h-[44px] rounded-full border border-slate-300 flex items-center justify-center text-slate-700 hover:bg-white transition-colors bg-white/40 backdrop-blur-sm"
+                    aria-label="Previous"
+                  >
+                    <ChevronLeft size={18} strokeWidth={2} />
+                  </button>
+                  <button
+                    className="w-[44px] h-[44px] rounded-full border border-slate-300 flex items-center justify-center text-slate-700 hover:bg-white transition-colors bg-white/40 backdrop-blur-sm"
+                    aria-label="Next"
+                  >
+                    <ChevronRight size={18} strokeWidth={2} />
+                  </button>
+                </div>
+              </div>
+
+              <div id="reservation" className="scroll-mt-32 w-full max-w-6xl relative z-20 mt-2 md:mt-4">
+                <ReservationBar activeTab={reservationTab} onTabChange={handleReservationTabChange} />
+              </div>
+
+              <div className="mt-2 md:mt-3 text-sm font-semibold text-slate-700 tracking-wide pb-2">
+                Istanbul Airport Transfer
+              </div>
+            </div>
           </div>
         </div>
       </section>
