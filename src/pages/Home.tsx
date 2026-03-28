@@ -75,33 +75,33 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 relative font-['Inter',sans-serif]">
-      <section className="relative pt-14 pb-3 md:pt-20 md:pb-4">
-        <div className="page-shell">
-          <div className="relative min-h-[52vh] md:min-h-[58vh] overflow-hidden rounded-[32px] md:rounded-[40px] bg-[#f7f4ef] shadow-[0_26px_70px_rgba(15,23,42,0.08)]">
+    <div className="min-h-screen bg-slate-50 relative font-sans">
+      <section className="relative pt-6 pb-3 md:pt-8 md:pb-4">
+        <div className="mx-auto w-full max-w-[1720px] px-4 sm:px-6 lg:px-8">
+          <div className="relative min-h-[35rem] md:min-h-[42rem] overflow-hidden rounded-[32px] md:rounded-[40px] bg-[#f7f4ef] shadow-[0_26px_70px_rgba(15,23,42,0.08)]">
             <div className="absolute inset-0 z-0">
               <img
                 src={heroImage}
                 alt="Hero Background"
-                className="w-full h-full object-cover object-[72%_center] scale-[1.18] sm:object-[76%_center] sm:scale-[1.14] lg:object-[82%_center] lg:scale-[1.08]"
+                className="w-full h-full object-cover object-[76%_center] scale-[1.08] brightness-[1.02] contrast-[1.04] sm:object-[80%_center] sm:scale-[1.05] lg:object-[86%_center] lg:scale-[1.01]"
               />
             </div>
 
-            <div className="absolute inset-0 z-0 bg-[linear-gradient(90deg,rgba(250,248,243,0.97)_0%,rgba(250,248,243,0.93)_24%,rgba(250,248,243,0.72)_42%,rgba(250,248,243,0.3)_58%,rgba(250,248,243,0)_74%)]" />
-            <div className="absolute inset-y-0 right-0 z-0 w-[26%] bg-[linear-gradient(270deg,rgba(15,23,42,0.16)_0%,rgba(15,23,42,0)_58%)]" />
+            <div className="absolute inset-0 z-0 bg-[linear-gradient(90deg,rgba(250,248,243,0.96)_0%,rgba(250,248,243,0.91)_18%,rgba(250,248,243,0.68)_30%,rgba(250,248,243,0.22)_41%,rgba(250,248,243,0)_55%)]" />
+            <div className="absolute inset-y-0 right-0 z-0 w-[14%] bg-[linear-gradient(270deg,rgba(15,23,42,0.08)_0%,rgba(15,23,42,0)_72%)]" />
 
-            <div className="page-shell relative z-10 w-full flex min-h-[52vh] md:min-h-[58vh] flex-col justify-start pt-8 pb-6 md:pt-12 md:pb-7">
-              <div className="max-w-3xl animate-fade-in-up mb-1">
+            <div className="relative z-10 flex min-h-[35rem] md:min-h-[42rem] w-full flex-col justify-between px-6 py-8 sm:px-8 md:px-10 md:py-10 xl:px-14 xl:py-12">
+              <div className="max-w-[34rem] md:max-w-[40rem] xl:max-w-[42rem] animate-fade-in-up">
                 <span className="text-[0.7rem] font-bold tracking-[0.16em] text-[#1e293b] uppercase mb-1 block">
                   EKSTRA İNDİRİM.
                 </span>
 
-                <h1 className="text-[2.05rem] md:text-[2.8rem] lg:text-[3.2rem] font-[800] text-[#0f172a] leading-[1.08] tracking-[-0.02em]">
-                  Gidiş-dönüş rezervasyonu yapın<br />ekstra %10 indirim kazanın.
+                <h1 className="font-sans text-[1.85rem] sm:text-[2.15rem] md:text-[2.7rem] xl:text-[3.25rem] font-medium text-[#0f172a] leading-[0.98] tracking-[-0.05em]">
+                  Güvenli ve rahat<br />yolculuk.
                 </h1>
 
                 {/* Circular Arrow Buttons */}
-                <div className="flex gap-3 mt-2">
+                <div className="flex gap-3 mt-4 md:mt-6">
                   <button
                     className="w-[44px] h-[44px] rounded-full border border-slate-300 flex items-center justify-center text-slate-700 hover:bg-white transition-colors bg-white/40 backdrop-blur-sm"
                     aria-label="Previous"
@@ -117,11 +117,11 @@ export default function Home() {
                 </div>
               </div>
 
-              <div id="reservation" className="scroll-mt-32 w-full max-w-6xl relative z-20 mt-2 md:mt-4">
+              <div id="reservation" className="scroll-mt-32 relative z-20 mt-6 md:mt-8 w-full">
                 <ReservationBar activeTab={reservationTab} onTabChange={handleReservationTabChange} />
               </div>
 
-              <div className="mt-2 md:mt-3 text-sm font-semibold text-slate-700 tracking-wide pb-2">
+              <div className="mt-4 text-sm font-semibold text-slate-700 tracking-wide">
                 Istanbul Airport Transfer
               </div>
             </div>
@@ -197,27 +197,27 @@ export default function Home() {
 
       <section className="py-20">
         <div className="page-shell">
-          <MapEmbed />
-        </div>
-      </section>
+          <div className="grid gap-8 xl:grid-cols-[1.18fr,0.82fr] xl:items-stretch">
+            <MapEmbed className="h-full" />
 
-      <section className="py-20">
-        <div className="page-shell">
-          <div className="rounded-[40px] bg-gradient-to-br from-brand-700 via-brand-600 to-brand-500 text-white px-6 py-12 md:px-12 md:py-16 text-center shadow-[0_35px_80px_rgba(166,114,66,0.35)]">
-            <h2 className="text-3xl md:text-4xl font-heading font-semibold mb-4">
-              {dictionary.home.ctaTitle}
-            </h2>
-            <p className="text-lg opacity-90 mb-8">{dictionary.home.ctaDescription}</p>
-            <a
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className="inline-flex items-center justify-center px-8 py-4 rounded-2xl bg-white text-brand-600 font-semibold shadow-lg shadow-slate-900/10 hover:-translate-y-0.5 transition-transform"
-            >
-              {dictionary.home.ctaButton}
-            </a>
+            <div className="rounded-[40px] bg-gradient-to-br from-brand-700 via-brand-600 to-brand-500 px-6 py-12 text-center text-white shadow-[0_35px_80px_rgba(166,114,66,0.35)] md:px-10 md:py-14 xl:flex xl:h-full xl:flex-col xl:items-center xl:justify-center">
+              <h2 className="text-3xl md:text-4xl font-heading font-semibold mb-4">
+                {dictionary.home.ctaTitle}
+              </h2>
+              <p className="mx-auto max-w-[28rem] text-lg opacity-90 mb-8">
+                {dictionary.home.ctaDescription}
+              </p>
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="inline-flex items-center justify-center px-8 py-4 rounded-2xl bg-white text-brand-600 font-semibold shadow-lg shadow-slate-900/10 hover:-translate-y-0.5 transition-transform"
+              >
+                {dictionary.home.ctaButton}
+              </a>
+            </div>
           </div>
         </div>
       </section>

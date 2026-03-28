@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Instagram, Menu, X, type LucideProps, ChevronDown, Globe } from 'lucide-react';
+import { Instagram, Menu, X, type LucideProps, ChevronDown } from 'lucide-react';
 import { useEffect, useRef, useState, type ComponentType, type MouseEvent as ReactMouseEvent } from 'react';
 import logoImage from '../images/image.png';
 import { useLanguage, type NavKey, type LanguageOption } from '../context/LanguageContext';
