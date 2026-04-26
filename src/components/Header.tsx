@@ -90,7 +90,10 @@ export default function Header() {
 
   const scrollToReservation = () => {
     if (typeof document === 'undefined') return;
-    const target = document.getElementById('reservation');
+    const targets = Array.from(
+      document.querySelectorAll<HTMLElement>('[data-reservation-anchor="true"]'),
+    );
+    const target = targets.find((item) => item.offsetParent !== null) ?? targets[0] ?? null;
     if (target) {
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -135,10 +138,41 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/40 bg-white/60 backdrop-blur-2xl transition-all duration-300">
+      <div className="border-b border-white/10 bg-slate-950 text-white md:hidden">
+        <div className="page-shell flex h-11 items-center justify-between">
+          <div className="flex items-center gap-2">
+            {socialLinks.slice(0, 2).map(({ key, href, label, className, Icon }) => (
+              <a
+                key={key}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                className={`flex h-8 w-8 items-center justify-center rounded-full text-white transition-transform hover:scale-105 ${className}`}
+              >
+                <Icon size={16} />
+              </a>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-3 text-xs font-semibold">
+            <span className="rounded-full border border-white/10 px-2.5 py-1 text-white/90">
+              {selectedLanguage.code.toUpperCase()}
+            </span>
+            <button
+              onClick={handleReservationClick}
+              className="rounded-full bg-white px-3 py-1.5 text-slate-950 shadow-sm"
+            >
+              {header.nav.reservation}
+            </button>
+          </div>
+        </div>
+      </div>
+
       <nav className="page-shell">
-        <div className="flex justify-between items-center h-20">
+        <div className="flex h-16 items-center justify-between md:h-20">
           <Link to="/" className="flex items-center space-x-3 group relative z-10">
-            <div className="relative h-16 w-20 rounded-2xl bg-white shadow-md flex items-center justify-center overflow-hidden border border-slate-200/50">
+            <div className="relative flex h-14 w-16 items-center justify-center overflow-hidden rounded-2xl border border-slate-200/50 bg-white shadow-md md:h-16 md:w-20">
               <img
                 src={logoImage}
                 alt="GetTransfer İstanbul Logo"
@@ -146,10 +180,10 @@ export default function Header() {
               />
             </div>
             <div className="leading-tight">
-              <div className="font-heading text-xl font-bold text-slate-900 tracking-tight">
+              <div className="font-heading text-[1.05rem] font-bold tracking-tight text-slate-900 md:text-xl">
                 GetTransfer
               </div>
-              <div className="text-[11px] font-semibold tracking-[0.24em] uppercase text-slate-400">
+              <div className="text-[10px] font-semibold uppercase tracking-[0.24em] text-slate-400 md:text-[11px]">
                 İstanbul · Türkiye
               </div>
             </div>
@@ -250,7 +284,7 @@ export default function Header() {
           </div>
 
           <button
-            className="md:hidden rounded-2xl border border-white/60 bg-white/70 p-2 shadow-inner shadow-slate-900/5"
+            className="rounded-2xl border border-white/60 bg-white/70 p-2 shadow-inner shadow-slate-900/5 md:hidden"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
           >

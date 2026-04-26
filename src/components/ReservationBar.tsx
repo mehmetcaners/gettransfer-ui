@@ -33,7 +33,8 @@ export default function ReservationBar({ activeTab: controlledTab, onTabChange }
   const [toSuggestions, setToSuggestions] = useState<PlaceSuggestion[]>([]);
   const [activeField, setActiveField] = useState<'from' | 'to' | null>(null);
   const [passengerOpen, setPassengerOpen] = useState(false);
-  const passengerRef = useRef<HTMLDivElement | null>(null);
+  const desktopPassengerRef = useRef<HTMLDivElement | null>(null);
+  const mobilePassengerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (controlledTab && controlledTab !== activeTab) {
@@ -141,7 +142,9 @@ export default function ReservationBar({ activeTab: controlledTab, onTabChange }
 
   useEffect(() => {
     const closeOnClickOutside = (event: MouseEvent) => {
-      if (passengerRef.current && !passengerRef.current.contains(event.target as Node)) {
+      const isInsideDesktop = desktopPassengerRef.current?.contains(event.target as Node) ?? false;
+      const isInsideMobile = mobilePassengerRef.current?.contains(event.target as Node) ?? false;
+      if (!isInsideDesktop && !isInsideMobile) {
         setPassengerOpen(false);
       }
     };
@@ -150,7 +153,7 @@ export default function ReservationBar({ activeTab: controlledTab, onTabChange }
   }, []);
 
   const renderTabs = () => (
-    <div className="flex bg-white shadow-md rounded-2xl w-fit p-1.5 gap-1 mb-3">
+    <div className="mb-2 flex w-full gap-1 overflow-x-auto rounded-[30px] bg-white/95 px-3 pt-3 shadow-md sm:mb-3 sm:w-fit sm:rounded-[26px] sm:p-1.5">
       <TabButton icon={<Car size={18} />} active={activeTab === 'transfer'} onClick={() => handleTabChange('transfer')}>
         {reservationBar.tabs['transfer']}
       </TabButton>
@@ -167,8 +170,8 @@ export default function ReservationBar({ activeTab: controlledTab, onTabChange }
     return (
       <div className="flex flex-col">
         {renderTabs()}
-        <div className="bg-white p-8 rounded-3xl shadow-xl">
-          <div className="text-center py-16">
+        <div className="rounded-3xl bg-white p-5 shadow-xl sm:p-8">
+          <div className="py-12 text-center sm:py-16">
             <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-brand-50 text-brand-300 mb-4">
               <Search size={32} className="opacity-50" />
             </div>
@@ -184,17 +187,20 @@ export default function ReservationBar({ activeTab: controlledTab, onTabChange }
       {renderTabs()}
 
       <div
-        className={`relative rounded-3xl bg-white shadow-2xl p-6 md:p-8 transition-all duration-500 ${error ? 'animate-shake ring-2 ring-red-400/50' : ''
+        className={`relative rounded-[30px] bg-white p-4 shadow-2xl transition-all duration-500 sm:rounded-3xl sm:p-6 md:p-8 ${error ? 'animate-shake ring-2 ring-red-400/50' : ''
           }`}
       >
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-5">
-          <div className="lg:col-span-3 relative group">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-12">
+          <div className="relative group sm:col-span-2 lg:col-span-3">
             <label htmlFor="from" className="sr-only">
               {reservationBar.placeholders.from}
             </label>
             <div className={`absolute inset-0 bg-white rounded-2xl border-2 border-brand-500 transition-all duration-300 ${activeField === 'from' ? 'ring-2 ring-brand-100' : ''}`} />
             <MapPin className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 text-brand-600`} size={20} />
+            <span className="pointer-events-none absolute left-12 top-3 text-[10px] font-bold uppercase tracking-[0.18em] text-brand-500 sm:hidden">
+              {dictionary.results.labels.from}
+            </span>
             <input
               id="from"
               type="text"
@@ -207,7 +213,7 @@ export default function ReservationBar({ activeTab: controlledTab, onTabChange }
               autoComplete="off"
               onFocus={() => setActiveField('from')}
               onBlur={() => setTimeout(() => setActiveField((prev) => (prev === 'from' ? null : prev)), 150)}
-              className={`relative bg-transparent w-full h-16 pl-12 pr-4 rounded-2xl text-slate-900 placeholder:text-slate-500 font-medium focus:outline-none transition-all`}
+              className={`relative h-16 w-full rounded-2xl bg-transparent pl-12 pr-4 text-base font-medium text-slate-900 placeholder:text-slate-500 transition-all focus:outline-none sm:text-base sm:placeholder:text-slate-500 ${fromInput ? 'pt-4 sm:pt-0' : 'pt-4 sm:pt-0'}`}
             />
             {activeField === 'from' && fromSuggestions.length > 0 && (
               <SuggestionList
@@ -223,22 +229,25 @@ export default function ReservationBar({ activeTab: controlledTab, onTabChange }
             )}
           </div>
 
-          <div className="lg:col-span-1 flex items-center justify-center">
+          <div className="relative z-10 -my-1 flex items-center justify-center sm:col-span-2 sm:my-0 lg:col-span-1">
             <button
               onClick={handleSwap}
-              className="p-4 rounded-2xl bg-brand-50/30 text-brand-400 hover:bg-brand-50 hover:text-brand-600 hover:rotate-180 transition-all duration-500 shadow-sm"
+              className="inline-flex h-14 w-14 items-center justify-center rounded-full border border-brand-100 bg-white text-brand-500 shadow-[0_10px_30px_rgba(161,128,114,0.18)] transition-all duration-500 hover:bg-brand-50 hover:text-brand-600 sm:h-auto sm:w-auto sm:max-w-none sm:rounded-2xl sm:border-0 sm:bg-brand-50/40 sm:p-4 sm:shadow-sm sm:hover:rotate-180"
               aria-label={reservationBar.swapAria}
             >
               <ArrowLeftRight size={20} />
             </button>
           </div>
 
-          <div className="lg:col-span-3 relative group">
+          <div className="relative group sm:col-span-2 lg:col-span-3">
             <label htmlFor="to" className="sr-only">
               {reservationBar.placeholders.to}
             </label>
             <div className={`absolute inset-0 bg-white rounded-2xl border-2 border-brand-500 transition-all duration-300 ${activeField === 'to' ? 'ring-2 ring-brand-100' : ''}`} />
             <MapPin className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 text-brand-600`} size={20} />
+            <span className="pointer-events-none absolute left-12 top-3 text-[10px] font-bold uppercase tracking-[0.18em] text-brand-500 sm:hidden">
+              {dictionary.results.labels.to}
+            </span>
             <input
               id="to"
               type="text"
@@ -251,7 +260,7 @@ export default function ReservationBar({ activeTab: controlledTab, onTabChange }
               autoComplete="off"
               onFocus={() => setActiveField('to')}
               onBlur={() => setTimeout(() => setActiveField((prev) => (prev === 'to' ? null : prev)), 150)}
-              className={`relative bg-transparent w-full h-16 pl-12 pr-4 rounded-2xl text-slate-900 placeholder:text-slate-500 font-medium focus:outline-none transition-all`}
+              className={`relative h-16 w-full rounded-2xl bg-transparent pl-12 pr-4 text-base font-medium text-slate-900 placeholder:text-slate-500 transition-all focus:outline-none ${toInput ? 'pt-4 sm:pt-0' : 'pt-4 sm:pt-0'}`}
             />
             {activeField === 'to' && toSuggestions.length > 0 && (
               <SuggestionList
@@ -267,7 +276,7 @@ export default function ReservationBar({ activeTab: controlledTab, onTabChange }
             )}
           </div>
 
-          <div className="lg:col-span-2">
+          <div className="sm:col-span-1 lg:col-span-2">
             <DateInputCard
               id="datetime"
               label="TARİH & SAAT"
@@ -278,8 +287,8 @@ export default function ReservationBar({ activeTab: controlledTab, onTabChange }
             />
           </div>
 
-          <div className="lg:col-span-2">
-            <div ref={passengerRef} className="relative h-full">
+          <div className="hidden sm:col-span-1 sm:block lg:col-span-2">
+            <div ref={desktopPassengerRef} className="relative h-full">
               <label className="sr-only" htmlFor="passenger-btn">
                 {dictionary.vehicles.passengersLabel}
               </label>
@@ -295,15 +304,15 @@ export default function ReservationBar({ activeTab: controlledTab, onTabChange }
                   <div className="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 shadow-sm">
                     <Users size={16} />
                   </div>
-                  <div className="flex flex-col items-start">
+                  <div className="flex min-w-0 flex-col items-start">
                     <span className="text-[10px] font-bold tracking-wider text-brand-500 uppercase transition-colors">YOLCU</span>
-                    <span className="font-semibold text-lg text-slate-900">{passengers} Kişi</span>
+                    <span className="text-base font-semibold text-slate-900 sm:text-lg">{passengers} Kişi</span>
                   </div>
                 </div>
               </button>
 
               {passengerOpen && (
-                <div className="absolute right-0 top-full mt-2 w-72 rounded-3xl border border-brand-100 bg-white shadow-xl shadow-brand-900/10 p-4 z-40 animate-scale-in">
+                <div className="absolute left-1/2 top-full z-40 mt-2 w-[min(20rem,calc(100vw-2.5rem))] -translate-x-1/2 rounded-3xl border border-brand-100 bg-white p-4 shadow-xl shadow-brand-900/10 animate-scale-in sm:left-auto sm:right-0 sm:w-72 sm:translate-x-0">
                   <div className="flex items-center justify-between p-2">
                     <span className="font-medium text-slate-600">Yolcu Sayısı</span>
                     <div className="flex items-center gap-3">
@@ -339,19 +348,138 @@ export default function ReservationBar({ activeTab: controlledTab, onTabChange }
             </div>
           </div>
 
-          <div className="lg:col-span-1">
+          <div className="hidden sm:col-span-2 sm:block lg:col-span-1">
             <button
               onClick={handleSearch}
               disabled={loading}
-              className="w-full h-16 rounded-2xl bg-white border-2 border-brand-500 text-brand-600 font-semibold shadow-sm hover:bg-brand-50/50 hover:-translate-y-0.5 active:scale-95 transition-all flex items-center justify-center"
+              className="flex h-16 w-full items-center justify-center gap-2 rounded-2xl border-2 border-brand-500 bg-white px-4 font-semibold text-brand-600 shadow-sm transition-all hover:-translate-y-0.5 hover:bg-brand-50/50 active:scale-95"
               aria-label={reservationBar.searchAria}
             >
-              {loading ? <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-brand-600" /> : <Search size={24} />}
+              {loading ? (
+                <div className="h-6 w-6 animate-spin rounded-full border-b-2 border-brand-600" />
+              ) : (
+                <>
+                  <Search size={22} />
+                  <span className="text-sm sm:text-base">{reservationBar.searchButton}</span>
+                </>
+              )}
             </button>
           </div>
         </div>
 
-        <div className="relative z-10 mt-6 flex flex-col gap-4 lg:flex-row lg:items-center">
+        <div className="mt-4 grid grid-cols-3 gap-3 sm:hidden">
+          <label className="flex min-h-[9rem] cursor-pointer flex-col justify-between rounded-[24px] border border-brand-100 bg-[#fbfbfb] px-4 py-4 shadow-[0_12px_32px_rgba(15,23,42,0.05)]">
+            <div className="space-y-3">
+              <span className="block text-[10px] font-bold uppercase tracking-[0.18em] text-brand-500">
+                {reservationBar.roundTrip}
+              </span>
+              <div className="relative">
+                <input
+                  type="checkbox"
+                  className="peer sr-only"
+                  checked={roundTrip}
+                  onChange={(e) => setRoundTrip(e.target.checked)}
+                />
+                <div className="h-12 w-20 rounded-full bg-slate-200 transition-colors duration-300 peer-checked:bg-brand-500/80" />
+                <div className="absolute left-2 top-2 h-8 w-8 rounded-full bg-white shadow-sm transition-transform duration-300 peer-checked:translate-x-8" />
+              </div>
+            </div>
+          </label>
+
+          <div ref={mobilePassengerRef} className="relative">
+            <button
+              id="passenger-btn-mobile"
+              type="button"
+              onClick={() => setPassengerOpen((open) => !open)}
+              className="flex min-h-[9rem] w-full flex-col items-start justify-between rounded-[24px] border border-brand-100 bg-[#fbfbfb] px-4 py-4 text-left shadow-[0_12px_32px_rgba(15,23,42,0.05)]"
+              aria-haspopup="true"
+              aria-expanded={passengerOpen}
+            >
+              <span className="block text-[10px] font-bold uppercase tracking-[0.18em] text-brand-500">
+                YOLCU
+              </span>
+              <div className="flex w-full items-end justify-between gap-3">
+                <span className="text-[1.75rem] font-semibold leading-none text-slate-900">{passengers}</span>
+                <span className="text-sm font-medium text-slate-600">Kişi</span>
+              </div>
+            </button>
+
+            {passengerOpen && (
+              <>
+                <button
+                  type="button"
+                  aria-label="Close passenger selector"
+                  onClick={() => setPassengerOpen(false)}
+                  className="fixed inset-0 z-40 bg-slate-950/20 backdrop-blur-[1px] sm:hidden"
+                />
+                <div className="fixed inset-x-4 top-1/2 z-50 w-auto -translate-y-1/2 rounded-[28px] border border-brand-100 bg-white p-5 shadow-2xl shadow-brand-900/20 animate-scale-in sm:absolute sm:inset-x-auto sm:right-0 sm:top-full sm:mt-2 sm:w-72 sm:translate-y-0">
+                  <div className="mb-4 flex items-start justify-between gap-4">
+                    <div>
+                      <span className="block text-[11px] font-bold uppercase tracking-[0.18em] text-brand-500">
+                        Yolcu
+                      </span>
+                      <span className="mt-1 block text-sm font-medium text-slate-500">
+                        Toplam yolcu sayisini secin
+                      </span>
+                    </div>
+                    <span className="rounded-full bg-brand-50 px-3 py-1 text-sm font-semibold text-brand-600">
+                      {passengers} Kisi
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between rounded-[22px] bg-slate-50 px-3 py-3">
+                    <button
+                      type="button"
+                      onClick={() => setPassengers((p) => Math.max(1, p - 1))}
+                      disabled={passengers <= 1}
+                      className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 transition-all hover:border-brand-500 hover:text-brand-600 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      <Minus size={18} />
+                    </button>
+                    <div className="flex flex-col items-center">
+                      <span className="text-[2rem] font-semibold leading-none text-slate-900">{passengers}</span>
+                      <span className="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
+                        Kisi
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setPassengers((p) => Math.min(16, p + 1))}
+                      disabled={passengers >= 16}
+                      className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 transition-all hover:border-brand-500 hover:text-brand-600 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      <Plus size={18} />
+                    </button>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setPassengerOpen(false)}
+                    className="mt-4 flex h-12 w-full items-center justify-center rounded-2xl bg-brand-600 text-sm font-semibold text-white shadow-lg shadow-brand-700/20 transition-colors hover:bg-brand-700"
+                  >
+                    Tamam
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+
+          <button
+            onClick={handleSearch}
+            disabled={loading}
+            className="flex min-h-[9rem] w-full flex-col items-center justify-center gap-3 rounded-[24px] bg-gradient-to-br from-brand-700 to-brand-500 px-4 py-4 text-white shadow-[0_20px_45px_rgba(93,64,55,0.35)] transition-all hover:-translate-y-0.5 active:scale-95 disabled:cursor-not-allowed disabled:opacity-70"
+            aria-label={reservationBar.searchAria}
+          >
+            {loading ? (
+              <div className="h-7 w-7 animate-spin rounded-full border-b-2 border-white" />
+            ) : (
+              <>
+                <Search size={28} />
+                <span className="text-base font-semibold">{reservationBar.searchButton}</span>
+              </>
+            )}
+          </button>
+        </div>
+
+        <div className="relative z-10 mt-6 hidden flex-col gap-4 sm:flex lg:flex-row lg:items-center">
           <label className="flex items-center gap-3 cursor-pointer group select-none">
             <div className="relative">
               <input
@@ -370,7 +498,7 @@ export default function ReservationBar({ activeTab: controlledTab, onTabChange }
         </div>
 
         {roundTrip && (
-          <div className="mt-6 animate-slideDown max-w-sm">
+          <div className="mt-6 max-w-full animate-slideDown sm:max-w-sm">
             <DateInputCard
               id="returnDatetime"
               label="DÖNÜŞ TARİHİ"
@@ -397,9 +525,9 @@ function TabButton({ active, onClick, children, icon }: { active: boolean; onCli
   return (
     <button
       onClick={onClick}
-      className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm tracking-widest transition-all duration-300 ${active
-        ? 'text-brand-600'
-        : 'text-slate-700 hover:text-brand-600 hover:bg-slate-50'
+      className={`flex min-w-[7.5rem] flex-1 items-center justify-center gap-2 border-b-[3px] px-3 pb-4 pt-2 text-center text-xs font-bold tracking-[0.18em] transition-all duration-300 sm:min-w-0 sm:flex-none sm:rounded-xl sm:border-b-0 sm:px-5 sm:py-2.5 sm:text-sm sm:tracking-widest ${active
+        ? 'border-brand-500 text-brand-600 sm:bg-transparent'
+        : 'border-transparent text-slate-700 hover:text-brand-600 sm:hover:bg-slate-50'
         }`}
     >
       {icon && <span className={`${active ? 'text-brand-600' : 'text-slate-400'}`}>{icon}</span>}
@@ -412,7 +540,7 @@ type SuggestionItem = PlaceSuggestion;
 
 function SuggestionList({ suggestions, onSelect }: { suggestions: SuggestionItem[]; onSelect: (suggestion: SuggestionItem) => void }) {
   return (
-    <div className="absolute z-20 mt-2 w-full rounded-3xl border border-black/5 bg-white/90 backdrop-blur-xl shadow-2xl shadow-slate-900/10 max-h-80 overflow-auto py-2 animate-scale-in">
+    <div className="absolute z-20 mt-2 max-h-64 w-full overflow-auto rounded-3xl border border-black/5 bg-white/90 py-2 shadow-2xl shadow-slate-900/10 backdrop-blur-xl animate-scale-in sm:max-h-80">
       {suggestions.map((item, index) => (
         <button
           type="button"
@@ -457,11 +585,10 @@ const MONTHS = [
 
 const DAYS = ['P', 'S', 'Ç', 'P', 'C', 'C', 'P'];
 
-const TIMES = Array.from({ length: 96 }).map((_, i) => {
-  const h = Math.floor(i / 4).toString().padStart(2, '0');
-  const m = ((i % 4) * 15).toString().padStart(2, '0');
-  return `${h}:${m}`;
-});
+const HOURS = Array.from({ length: 24 }).map((_, i) => i.toString().padStart(2, '0'));
+const MINUTES = ['00', '15', '30', '45'];
+const TIMES = HOURS.flatMap((hour) => MINUTES.map((minute) => `${hour}:${minute}`));
+const WHEEL_ITEM_HEIGHT = 44;
 
 function DateInputCard({ id, label, helper, value, onChange, locale }: DateInputCardProps) {
   const [open, setOpen] = useState(false);
@@ -470,6 +597,11 @@ function DateInputCard({ id, label, helper, value, onChange, locale }: DateInput
   // Seçili değerleri parse et
   const selectedDate = value ? new Date(value) : null;
   const selectedTimeStr = selectedDate ? `${selectedDate.getHours().toString().padStart(2, '0')}:${selectedDate.getMinutes().toString().padStart(2, '0')}` : '';
+  const normalizedHour = selectedDate ? selectedDate.getHours().toString().padStart(2, '0') : '12';
+  const normalizedMinuteValue = selectedDate ? Math.round(selectedDate.getMinutes() / 15) * 15 : 0;
+  const normalizedMinute = Math.min(45, Math.max(0, normalizedMinuteValue)).toString().padStart(2, '0');
+  const [mobileHour, setMobileHour] = useState(normalizedHour);
+  const [mobileMinute, setMobileMinute] = useState(normalizedMinute);
 
   // Calendar state
   const [viewYear, setViewYear] = useState(selectedDate?.getFullYear() || new Date().getFullYear());
@@ -487,6 +619,11 @@ function DateInputCard({ id, label, helper, value, onChange, locale }: DateInput
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    setMobileHour(normalizedHour);
+    setMobileMinute(normalizedMinute);
+  }, [normalizedHour, normalizedMinute]);
 
   const handleDateSelect = (day: number) => {
     const newDate = new Date(viewYear, viewMonth, day);
@@ -581,72 +718,214 @@ function DateInputCard({ id, label, helper, value, onChange, locale }: DateInput
       </button>
 
       {open && (
-        <div className="absolute left-0 top-full mt-2 z-50 bg-white rounded-3xl shadow-xl shadow-brand-900/10 border border-brand-100 p-4 w-[320px] animate-scale-in">
-          {view === 'date' ? (
-            <div className="flex flex-col">
-              <div className="flex items-center justify-between mb-4 px-1">
-                <button onClick={prevMonth} className="p-1 hover:bg-brand-50 text-slate-400 hover:text-brand-600 rounded-full transition-colors"><ChevronLeft size={20} /></button>
-                <div className="font-bold text-slate-900 text-lg">
-                  {MONTHS[viewMonth]} {viewYear}
-                </div>
-                <button onClick={nextMonth} className="p-1 hover:bg-brand-50 text-slate-400 hover:text-brand-600 rounded-full transition-colors"><ChevronRight size={20} /></button>
-              </div>
-
-              <div className="grid grid-cols-7 mb-2 text-center">
-                {DAYS.map(d => (
-                  <div key={d} className="text-xs font-bold text-slate-400 py-1">{d}</div>
-                ))}
-              </div>
-
-              <div className="grid grid-cols-7 gap-1 text-center">
-                {blanks.map((_, i) => <div key={`blank-${i}`} />)}
-                {days.map(d => {
-                  const isSelected = selectedDate && selectedDate.getDate() === d && selectedDate.getMonth() === viewMonth && selectedDate.getFullYear() === viewYear;
-                  return (
-                    <button
-                      key={d}
-                      onClick={() => handleDateSelect(d)}
-                      className={`h-9 w-9 rounded-full flex items-center justify-center text-sm font-semibold transition-all ${isSelected
-                        ? 'bg-brand-600 text-white shadow-md shadow-brand-500/30'
-                        : 'text-slate-700 hover:bg-brand-50 hover:text-brand-600'
-                        }`}
-                    >
-                      {d}
-                    </button>
-                  );
-                })}
-              </div>
+        <>
+          <button
+            type="button"
+            aria-label="Close date selector"
+            onClick={() => {
+              setOpen(false);
+              setView('date');
+            }}
+            className="fixed inset-0 z-[80] bg-slate-950/20 backdrop-blur-[1px] sm:hidden"
+          />
+          <div className="fixed inset-x-0 bottom-0 z-[90] max-h-[82vh] overflow-y-auto rounded-t-[30px] border-x border-t border-brand-100 bg-white px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-4 shadow-[0_-18px_50px_rgba(15,23,42,0.18)] animate-scale-in sm:absolute sm:inset-x-auto sm:bottom-auto sm:left-0 sm:top-full sm:z-50 sm:mt-2 sm:max-h-none sm:w-[320px] sm:overflow-hidden sm:rounded-[28px] sm:border sm:p-4 sm:shadow-2xl sm:shadow-brand-900/20">
+            <div className="mb-4 flex justify-center sm:hidden">
+              <span className="h-1.5 w-14 rounded-full bg-slate-200" />
             </div>
-          ) : (
-            <div className="flex flex-col h-[320px]">
-              <div className="flex items-center gap-2 mb-3 pb-3 border-b border-brand-50">
-                <button onClick={() => setView('date')} className="flex items-center gap-1 text-xs font-bold text-brand-600 hover:text-brand-700 uppercase tracking-widest">
-                  <ChevronLeft size={14} /> Tarih
-                </button>
-                <div className="flex-1 text-center font-semibold text-slate-900">
-                  {selectedDate ? selectedDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' }) : ''}
+            {view === 'date' ? (
+              <div className="flex flex-col">
+                <div className="mb-4 flex items-center justify-between px-1">
+                  <button onClick={prevMonth} className="rounded-full p-1 text-slate-400 transition-colors hover:bg-brand-50 hover:text-brand-600"><ChevronLeft size={20} /></button>
+                  <div className="text-lg font-bold text-slate-900">
+                    {MONTHS[viewMonth]} {viewYear}
+                  </div>
+                  <button onClick={nextMonth} className="rounded-full p-1 text-slate-400 transition-colors hover:bg-brand-50 hover:text-brand-600"><ChevronRight size={20} /></button>
                 </div>
-              </div>
-              <div className="flex-1 overflow-y-auto pr-1">
-                <div className="grid grid-cols-3 gap-2">
-                  {TIMES.map(t => (
-                    <button
-                      key={t}
-                      onClick={() => handleTimeSelect(t)}
-                      className={`py-2 rounded-xl text-sm font-semibold transition-all ${selectedTimeStr === t
-                        ? 'bg-brand-600 text-white shadow-md'
-                        : 'bg-slate-50 text-slate-600 hover:bg-brand-50 hover:text-brand-600'
-                        }`}
-                    >
-                      {t}
-                    </button>
+
+                <div className="mb-2 grid grid-cols-7 text-center">
+                  {DAYS.map(d => (
+                    <div key={d} className="py-1 text-xs font-bold text-slate-400">{d}</div>
                   ))}
                 </div>
+
+                <div className="grid grid-cols-7 gap-1 text-center">
+                  {blanks.map((_, i) => <div key={`blank-${i}`} />)}
+                  {days.map(d => {
+                    const isSelected = selectedDate && selectedDate.getDate() === d && selectedDate.getMonth() === viewMonth && selectedDate.getFullYear() === viewYear;
+                    return (
+                      <button
+                        key={d}
+                        onClick={() => handleDateSelect(d)}
+                        className={`mx-auto flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold transition-all ${isSelected
+                          ? 'bg-brand-600 text-white shadow-md shadow-brand-500/30'
+                          : 'text-slate-700 hover:bg-brand-50 hover:text-brand-600'
+                          }`}
+                      >
+                        {d}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          )}
-        </div>
+            ) : (
+              <>
+                <div className="flex min-h-full flex-col sm:hidden">
+                  <div className="mb-4 flex items-center gap-2 border-b border-brand-50 pb-3">
+                    <button onClick={() => setView('date')} className="flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-brand-600 hover:text-brand-700">
+                      <ChevronLeft size={14} /> Tarih
+                    </button>
+                    <div className="flex-1 text-center font-semibold text-slate-900">
+                      {selectedDate ? selectedDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' }) : ''}
+                    </div>
+                  </div>
+                  <div className="rounded-[24px] bg-slate-50/80 px-3 py-4">
+                    <div className="grid grid-cols-2 gap-3">
+                      <TimeWheelColumn label="Saat" values={HOURS} selectedValue={mobileHour} onChange={setMobileHour} />
+                      <TimeWheelColumn label="Dakika" values={MINUTES} selectedValue={mobileMinute} onChange={setMobileMinute} />
+                    </div>
+                  </div>
+                  <div className="sticky bottom-0 mt-4 bg-white/95 pt-3 backdrop-blur">
+                    <div className="flex items-center justify-between rounded-2xl bg-brand-50 px-4 py-3">
+                      <span className="text-xs font-bold uppercase tracking-[0.16em] text-brand-500">
+                        Seçilen Saat
+                      </span>
+                      <span className="text-lg font-semibold text-brand-700">
+                        {mobileHour}:{mobileMinute}
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleTimeSelect(`${mobileHour}:${mobileMinute}`)}
+                      className="mt-4 flex h-12 w-full items-center justify-center rounded-2xl bg-brand-600 text-sm font-semibold text-white shadow-lg shadow-brand-700/20 transition-colors hover:bg-brand-700"
+                    >
+                      Saati Onayla
+                    </button>
+                  </div>
+                </div>
+
+                <div className="hidden h-[320px] flex-col sm:flex">
+                  <div className="mb-3 flex items-center gap-2 border-b border-brand-50 pb-3">
+                    <button onClick={() => setView('date')} className="flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-brand-600 hover:text-brand-700">
+                      <ChevronLeft size={14} /> Tarih
+                    </button>
+                    <div className="flex-1 text-center font-semibold text-slate-900">
+                      {selectedDate ? selectedDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' }) : ''}
+                    </div>
+                  </div>
+                  <div className="flex-1 overflow-y-auto pr-1">
+                    <div className="grid grid-cols-3 gap-2">
+                      {TIMES.map(t => (
+                        <button
+                          key={t}
+                          onClick={() => handleTimeSelect(t)}
+                          className={`rounded-xl py-2 text-sm font-semibold transition-all ${selectedTimeStr === t
+                            ? 'bg-brand-600 text-white shadow-md'
+                            : 'bg-slate-50 text-slate-600 hover:bg-brand-50 hover:text-brand-600'
+                            }`}
+                        >
+                          {t}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </>
       )}
+    </div>
+  );
+}
+
+type TimeWheelColumnProps = {
+  label: string;
+  values: string[];
+  selectedValue: string;
+  onChange: (value: string) => void;
+};
+
+function TimeWheelColumn({ label, values, selectedValue, onChange }: TimeWheelColumnProps) {
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const paddedValues = ['', '', ...values, '', ''];
+
+  const commitSelection = (index: number, behavior: ScrollBehavior) => {
+    const clampedIndex = Math.max(0, Math.min(values.length - 1, index));
+    const nextValue = values[clampedIndex];
+
+    onChange(nextValue);
+    scrollRef.current?.scrollTo({
+      top: clampedIndex * WHEEL_ITEM_HEIGHT,
+      behavior,
+    });
+  };
+
+  useEffect(() => {
+    const selectedIndex = Math.max(0, values.indexOf(selectedValue));
+    scrollRef.current?.scrollTo({
+      top: selectedIndex * WHEEL_ITEM_HEIGHT,
+      behavior: 'auto',
+    });
+  }, [selectedValue, values]);
+
+  useEffect(() => {
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleScroll = () => {
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+
+    scrollTimeoutRef.current = setTimeout(() => {
+      const currentTop = scrollRef.current?.scrollTop ?? 0;
+      const nextIndex = Math.round(currentTop / WHEEL_ITEM_HEIGHT);
+      commitSelection(nextIndex, 'smooth');
+    }, 80);
+  };
+
+  return (
+    <div className="rounded-[22px] bg-white px-2 py-3 shadow-inner shadow-slate-900/5">
+      <div className="mb-2 text-center text-[11px] font-bold uppercase tracking-[0.18em] text-brand-500">
+        {label}
+      </div>
+      <div className="relative">
+        <div className="pointer-events-none absolute inset-x-0 top-1/2 z-0 h-11 -translate-y-1/2 rounded-2xl border border-brand-100 bg-brand-50/70 shadow-sm" />
+        <div
+          ref={scrollRef}
+          onScroll={handleScroll}
+          className="relative z-10 h-[176px] snap-y snap-mandatory overflow-y-auto [scrollbar-width:none] sm:h-[220px] [&::-webkit-scrollbar]:hidden"
+        >
+          {paddedValues.map((item, index) => {
+            const isActive = item === selectedValue;
+
+            return (
+              <button
+                key={`${label}-${item || 'blank'}-${index}`}
+                type="button"
+                disabled={!item}
+                onClick={() => {
+                  if (!item) return;
+                  commitSelection(values.indexOf(item), 'smooth');
+                }}
+                className={`flex h-11 w-full snap-center items-center justify-center text-xl font-semibold transition-all ${item
+                  ? isActive
+                    ? 'text-brand-700'
+                    : 'text-slate-400'
+                  : 'cursor-default opacity-0'
+                  }`}
+              >
+                {item || '00'}
+              </button>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }

@@ -38,7 +38,10 @@ export default function Home() {
 
   const scrollToReservation = useCallback(() => {
     if (typeof document === 'undefined') return;
-    const target = document.getElementById('reservation');
+    const targets = Array.from(
+      document.querySelectorAll<HTMLElement>('[data-reservation-anchor="true"]'),
+    );
+    const target = targets.find((item) => item.offsetParent !== null) ?? targets[0] ?? null;
     if (target) {
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -76,32 +79,66 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-slate-50 relative font-sans">
-      <section className="relative pt-6 pb-3 md:pt-8 md:pb-4">
+      <section className="relative pb-3 pt-3 sm:pt-6 md:pb-4 md:pt-8">
         <div className="mx-auto w-full max-w-[1720px] px-4 sm:px-6 lg:px-8">
-          <div className="relative min-h-[35rem] md:min-h-[42rem] overflow-hidden rounded-[32px] md:rounded-[40px] bg-[#f7f4ef] shadow-[0_26px_70px_rgba(15,23,42,0.08)]">
-            <div className="absolute inset-0 z-0">
-              <img
-                src={heroImage}
-                alt="Hero Background"
-                className="w-full h-full object-cover object-[76%_center] scale-[1.08] brightness-[1.02] contrast-[1.04] sm:object-[80%_center] sm:scale-[1.05] lg:object-[86%_center] lg:scale-[1.01]"
-              />
+          <div className="space-y-4 sm:hidden">
+            <div className="relative min-h-[11rem] overflow-hidden rounded-[30px] bg-[#f7f4ef] shadow-[0_24px_60px_rgba(15,23,42,0.08)]">
+              <div className="absolute inset-0 z-0">
+                <img
+                  src={heroImage}
+                  alt="Hero Background"
+                  className="h-full w-full object-cover object-[78%_center] scale-[1.04] brightness-[1.02] contrast-[1.02]"
+                />
+              </div>
+              <div className="absolute inset-0 z-0 bg-[linear-gradient(90deg,rgba(250,248,243,0.98)_0%,rgba(250,248,243,0.93)_28%,rgba(250,248,243,0.56)_58%,rgba(250,248,243,0.06)_100%)]" />
+
+              <div className="relative z-10 flex min-h-[11rem] flex-col justify-center px-6 py-5">
+                <span className="mb-2 block text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#1e293b]">
+                  EKSTRA İNDİRİM.
+                </span>
+                <h1 className="max-w-[12rem] font-sans text-[1.25rem] font-medium leading-[1.02] tracking-[-0.05em] text-[#0f172a]">
+                  Güvenli ve rahat
+                  <br />
+                  yolculuk.
+                </h1>
+              </div>
             </div>
 
-            <div className="absolute inset-0 z-0 bg-[linear-gradient(90deg,rgba(250,248,243,0.96)_0%,rgba(250,248,243,0.91)_18%,rgba(250,248,243,0.68)_30%,rgba(250,248,243,0.22)_41%,rgba(250,248,243,0)_55%)]" />
-            <div className="absolute inset-y-0 right-0 z-0 w-[14%] bg-[linear-gradient(270deg,rgba(15,23,42,0.08)_0%,rgba(15,23,42,0)_72%)]" />
+            <div data-reservation-anchor="true" className="relative z-20 w-full scroll-mt-32">
+              <ReservationBar activeTab={reservationTab} onTabChange={handleReservationTabChange} />
+            </div>
 
-            <div className="relative z-10 flex min-h-[35rem] md:min-h-[42rem] w-full flex-col justify-between px-6 py-8 sm:px-8 md:px-10 md:py-10 xl:px-14 xl:py-12">
-              <div className="max-w-[34rem] md:max-w-[40rem] xl:max-w-[42rem] animate-fade-in-up">
-                <span className="text-[0.7rem] font-bold tracking-[0.16em] text-[#1e293b] uppercase mb-1 block">
+            <div className="px-1 text-sm font-semibold tracking-wide text-slate-700">
+              Istanbul Airport Transfer
+            </div>
+          </div>
+
+          <div className="relative hidden min-h-[46rem] overflow-visible rounded-[32px] bg-[#f7f4ef] shadow-[0_26px_70px_rgba(15,23,42,0.08)] sm:block sm:min-h-[42rem] md:rounded-[40px]">
+            <div className="absolute inset-0 z-0 overflow-hidden rounded-[32px] md:rounded-[40px]">
+              <div className="absolute inset-0 z-0">
+                <img
+                  src={heroImage}
+                  alt="Hero Background"
+                  className="w-full h-full object-cover object-[76%_center] scale-[1.08] brightness-[1.02] contrast-[1.04] sm:object-[80%_center] sm:scale-[1.05] lg:object-[86%_center] lg:scale-[1.01]"
+                />
+              </div>
+
+              <div className="absolute inset-0 z-0 bg-[linear-gradient(90deg,rgba(250,248,243,0.96)_0%,rgba(250,248,243,0.91)_18%,rgba(250,248,243,0.68)_30%,rgba(250,248,243,0.22)_41%,rgba(250,248,243,0)_55%)]" />
+              <div className="absolute inset-y-0 right-0 z-0 w-[14%] bg-[linear-gradient(270deg,rgba(15,23,42,0.08)_0%,rgba(15,23,42,0)_72%)]" />
+            </div>
+
+            <div className="relative z-10 flex min-h-[46rem] w-full flex-col justify-start gap-6 px-4 py-5 sm:min-h-[42rem] sm:gap-8 sm:px-8 sm:py-8 md:min-h-[42rem] md:justify-between md:px-10 md:py-10 xl:px-14 xl:py-12">
+              <div className="max-w-[18rem] animate-fade-in-up sm:max-w-[34rem] md:max-w-[40rem] xl:max-w-[42rem]">
+                <span className="mb-1 block text-[0.66rem] font-bold uppercase tracking-[0.16em] text-[#1e293b] sm:text-[0.7rem]">
                   EKSTRA İNDİRİM.
                 </span>
 
-                <h1 className="font-sans text-[1.85rem] sm:text-[2.15rem] md:text-[2.7rem] xl:text-[3.25rem] font-medium text-[#0f172a] leading-[0.98] tracking-[-0.05em]">
+                <h1 className="font-sans text-[1.55rem] font-medium leading-[0.96] tracking-[-0.05em] text-[#0f172a] sm:text-[2.15rem] md:text-[2.7rem] xl:text-[3.25rem]">
                   Güvenli ve rahat<br />yolculuk.
                 </h1>
 
                 {/* Circular Arrow Buttons */}
-                <div className="flex gap-3 mt-4 md:mt-6">
+                <div className="mt-4 hidden gap-3 sm:flex md:mt-6">
                   <button
                     className="w-[44px] h-[44px] rounded-full border border-slate-300 flex items-center justify-center text-slate-700 hover:bg-white transition-colors bg-white/40 backdrop-blur-sm"
                     aria-label="Previous"
@@ -117,30 +154,17 @@ export default function Home() {
                 </div>
               </div>
 
-              <div id="reservation" className="scroll-mt-32 relative z-20 mt-6 md:mt-8 w-full">
+              <div data-reservation-anchor="true" className="scroll-mt-32 relative z-20 mt-6 md:mt-8 w-full">
                 <ReservationBar activeTab={reservationTab} onTabChange={handleReservationTabChange} />
               </div>
 
-              <div className="mt-4 text-sm font-semibold text-slate-700 tracking-wide">
+              <div className="mt-2 text-xs font-semibold tracking-wide text-slate-700 sm:mt-4 sm:text-sm">
                 Istanbul Airport Transfer
               </div>
             </div>
           </div>
         </div>
       </section>
-
-      {/* WhatsApp Floating Button */}
-      <a
-        href="https://wa.me/"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-[#25D366] text-white px-5 py-3 rounded-full shadow-lg hover:-translate-y-1 hover:shadow-xl hover:bg-[#20bd5a] transition-all font-semibold"
-      >
-        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 fill-current">
-          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-        </svg>
-        WhatsApp
-      </a>
 
       <section className="py-20">
         <div className="page-shell">

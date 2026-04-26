@@ -1,10 +1,11 @@
-import { LayoutDashboard, LogOut, ReceiptText, ShieldCheck } from 'lucide-react';
+import { LayoutDashboard, LogOut, ReceiptText, Route, ShieldCheck } from 'lucide-react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 
 const navItems = [
   { to: '/admin/dashboard', label: 'Genel Bakis', Icon: LayoutDashboard },
   { to: '/admin/bookings', label: 'Rezervasyonlar', Icon: ReceiptText },
+  { to: '/admin/pricing/distance-tiers', label: 'KM Fiyatlari', Icon: Route },
 ];
 
 export default function AdminLayout() {

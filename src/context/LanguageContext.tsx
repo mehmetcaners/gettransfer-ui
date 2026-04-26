@@ -15,6 +15,10 @@ export type LanguageOption = {
   flag: string;
 };
 
+const LANGUAGE_STORAGE_KEY = 'gt-language';
+const LANGUAGE_EXPLICIT_STORAGE_KEY = 'gt-language-explicit';
+const DEFAULT_LANGUAGE: LanguageCode = 'en';
+
 type LanguageContextValue = {
   language: LanguageCode;
   setLanguage: (code: LanguageCode) => void;
@@ -36,19 +40,23 @@ const LanguageContext = createContext<LanguageContextValue | null>(null);
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<LanguageCode>(() => {
     if (typeof window === 'undefined') {
-      return 'tr';
+      return DEFAULT_LANGUAGE;
     }
-    const stored = window.localStorage.getItem('gt-language');
-    if (stored && Object.prototype.hasOwnProperty.call(translations, stored)) {
+    const stored = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
+    const isExplicit = window.localStorage.getItem(LANGUAGE_EXPLICIT_STORAGE_KEY) === 'true';
+
+    if (stored && Object.prototype.hasOwnProperty.call(translations, stored) && (isExplicit || stored !== 'tr')) {
       return stored as LanguageCode;
     }
-    return 'tr';
+
+    return DEFAULT_LANGUAGE;
   });
 
   const setLanguage = useCallback((code: LanguageCode) => {
     setLanguageState(code);
     if (typeof window !== 'undefined') {
-      window.localStorage.setItem('gt-language', code);
+      window.localStorage.setItem(LANGUAGE_STORAGE_KEY, code);
+      window.localStorage.setItem(LANGUAGE_EXPLICIT_STORAGE_KEY, 'true');
     }
   }, []);
 

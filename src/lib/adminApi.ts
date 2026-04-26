@@ -132,6 +132,27 @@ export interface AdminBookingUpdatePayload {
   note?: string | null;
 }
 
+export interface AdminDistancePriceTier {
+  id: number;
+  minKm: MoneyValue;
+  maxKm: MoneyValue;
+  price: MoneyValue;
+  currency: string;
+  isActive: boolean;
+}
+
+export interface AdminDistancePriceTierListResponse {
+  items: AdminDistancePriceTier[];
+}
+
+export interface AdminDistancePriceTierUpsertPayload {
+  minKm: string;
+  maxKm: string;
+  price: string;
+  currency: string;
+  isActive: boolean;
+}
+
 const defaultHeaders = {
   'Content-Type': 'application/json',
 };
@@ -220,6 +241,17 @@ function normaliseBookingExtra(payload: JsonRecord): AdminBookingExtra {
     title: String(payload.title ?? ''),
     price: toMoneyValue(payload.price ?? 0),
     currency: String(payload.currency ?? 'TRY'),
+  };
+}
+
+function normaliseDistancePriceTier(payload: JsonRecord): AdminDistancePriceTier {
+  return {
+    id: toNumber(payload.id),
+    minKm: toMoneyValue(payload.min_km ?? payload.minKm ?? 0),
+    maxKm: toMoneyValue(payload.max_km ?? payload.maxKm ?? 0),
+    price: toMoneyValue(payload.price ?? 0),
+    currency: String(payload.currency ?? 'EUR'),
+    isActive: Boolean(payload.is_active ?? payload.isActive),
   };
 }
 
@@ -426,6 +458,60 @@ export async function updateAdminBooking(
   });
   const payload = await handleResponse<JsonRecord>(response);
   return normaliseBookingDetail(payload);
+}
+
+export async function fetchAdminDistancePriceTiers(
+  token: string,
+): Promise<AdminDistancePriceTierListResponse> {
+  const response = await fetch(`${baseUrl}/api/admin/pricing/distance-tiers`, {
+    headers: authHeaders(token),
+  });
+  const payload = await handleResponse<JsonRecord>(response);
+  const items = Array.isArray(payload.items)
+    ? payload.items.map((item) => normaliseDistancePriceTier(item as JsonRecord))
+    : [];
+
+  return { items };
+}
+
+export async function createAdminDistancePriceTier(
+  token: string,
+  payload: AdminDistancePriceTierUpsertPayload,
+): Promise<AdminDistancePriceTier> {
+  const response = await fetch(`${baseUrl}/api/admin/pricing/distance-tiers`, {
+    method: 'POST',
+    headers: authHeaders(token),
+    body: JSON.stringify({
+      min_km: payload.minKm,
+      max_km: payload.maxKm,
+      price: payload.price,
+      currency: payload.currency,
+      is_active: payload.isActive,
+    }),
+  });
+  const data = await handleResponse<JsonRecord>(response);
+  return normaliseDistancePriceTier(data);
+}
+
+export async function updateAdminDistancePriceTier(
+  token: string,
+  tierId: number,
+  payload: Partial<AdminDistancePriceTierUpsertPayload>,
+): Promise<AdminDistancePriceTier> {
+  const body: JsonRecord = {};
+  if (Object.prototype.hasOwnProperty.call(payload, 'minKm')) body.min_km = payload.minKm;
+  if (Object.prototype.hasOwnProperty.call(payload, 'maxKm')) body.max_km = payload.maxKm;
+  if (Object.prototype.hasOwnProperty.call(payload, 'price')) body.price = payload.price;
+  if (Object.prototype.hasOwnProperty.call(payload, 'currency')) body.currency = payload.currency;
+  if (Object.prototype.hasOwnProperty.call(payload, 'isActive')) body.is_active = payload.isActive;
+
+  const response = await fetch(`${baseUrl}/api/admin/pricing/distance-tiers/${tierId}`, {
+    method: 'PATCH',
+    headers: authHeaders(token),
+    body: JSON.stringify(body),
+  });
+  const data = await handleResponse<JsonRecord>(response);
+  return normaliseDistancePriceTier(data);
 }
 
 export function resolveAdminAssetUrl(path: string): string {

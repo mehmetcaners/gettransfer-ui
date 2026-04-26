@@ -17,6 +17,7 @@ import AdminLoginPage from './pages/admin/AdminLogin';
 import AdminDashboardPage from './pages/admin/AdminDashboard';
 import AdminBookingsPage from './pages/admin/AdminBookings';
 import AdminBookingDetailPage from './pages/admin/AdminBookingDetail';
+import AdminDistancePricingPage from './pages/admin/AdminDistancePricing';
 
 function PublicLayout() {
   return (
@@ -54,6 +55,7 @@ function App() {
                 <Route path="dashboard" element={<AdminDashboardPage />} />
                 <Route path="bookings" element={<AdminBookingsPage />} />
                 <Route path="bookings/:bookingId" element={<AdminBookingDetailPage />} />
+                <Route path="pricing/distance-tiers" element={<AdminDistancePricingPage />} />
                 <Route path="*" element={<Navigate to="/admin/dashboard" replace />} />
               </Route>
             </Route>
