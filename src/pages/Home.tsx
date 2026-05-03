@@ -93,10 +93,10 @@ export default function Home() {
               <div className="absolute inset-0 z-0 bg-[linear-gradient(90deg,rgba(250,248,243,0.98)_0%,rgba(250,248,243,0.93)_28%,rgba(250,248,243,0.56)_58%,rgba(250,248,243,0.06)_100%)]" />
 
               <div className="relative z-10 flex min-h-[11rem] flex-col justify-center px-6 py-5">
-                <span className="mb-2 block text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#1e293b]">
+                <span aria-hidden="true" className="invisible mb-2 block text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#1e293b]">
                   EKSTRA İNDİRİM.
                 </span>
-                <h1 className="max-w-[12rem] font-sans text-[1.25rem] font-medium leading-[1.02] tracking-[-0.05em] text-[#0f172a]">
+                <h1 aria-hidden="true" className="invisible max-w-[12rem] font-sans text-[1.25rem] font-medium leading-[1.02] tracking-[-0.05em] text-[#0f172a]">
                   Güvenli ve rahat
                   <br />
                   yolculuk.
@@ -129,11 +129,11 @@ export default function Home() {
 
             <div className="relative z-10 flex min-h-[46rem] w-full flex-col justify-start gap-6 px-4 py-5 sm:min-h-[42rem] sm:gap-8 sm:px-8 sm:py-8 md:min-h-[42rem] md:justify-between md:px-10 md:py-10 xl:px-14 xl:py-12">
               <div className="max-w-[18rem] animate-fade-in-up sm:max-w-[34rem] md:max-w-[40rem] xl:max-w-[42rem]">
-                <span className="mb-1 block text-[0.66rem] font-bold uppercase tracking-[0.16em] text-[#1e293b] sm:text-[0.7rem]">
+                <span aria-hidden="true" className="invisible mb-1 block text-[0.66rem] font-bold uppercase tracking-[0.16em] text-[#1e293b] sm:text-[0.7rem]">
                   EKSTRA İNDİRİM.
                 </span>
 
-                <h1 className="font-sans text-[1.55rem] font-medium leading-[0.96] tracking-[-0.05em] text-[#0f172a] sm:text-[2.15rem] md:text-[2.7rem] xl:text-[3.25rem]">
+                <h1 aria-hidden="true" className="invisible font-sans text-[1.55rem] font-medium leading-[0.96] tracking-[-0.05em] text-[#0f172a] sm:text-[2.15rem] md:text-[2.7rem] xl:text-[3.25rem]">
                   Güvenli ve rahat<br />yolculuk.
                 </h1>
 
