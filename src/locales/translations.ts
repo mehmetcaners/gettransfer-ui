@@ -153,15 +153,20 @@ export type TranslationContent = {
     mapTitle: string;
   };
   about: {
+    badge: string;
     title: string;
     description: string;
     stats: {
       label: string;
       value: string;
+      detail: string;
     }[];
     missionTitle: string;
     missionParagraphs: string[];
+    missionChecklist: string[];
+    imageTags: string[];
     whyTitle: string;
+    whyDescription: string;
     whyItems: {
       title: string;
       description: string;
@@ -455,47 +460,78 @@ export const translations: Record<LanguageCode, LanguageDescriptor> = {
         mapTitle: 'GetTransfer İstanbul Ofis',
       },
       about: {
-        title: 'Hakkımızda',
+        badge: 'HAKKIMIZDA',
+        title: 'İstanbul Havalimanı Transferinde 20 Yıllık Güven',
         description:
-          "GetTransfer İstanbul olarak, Türkiye'nin önde gelen havalimanlarında güvenilir ve konforlu transfer hizmeti sunuyoruz.",
+          'Yurtdışından gelen misafirlerimizi İstanbul Havalimanı ve Sabiha Gökçen’de karşılıyor, otel transferi, şehir içi ulaşım ve Türkiye turu hizmetlerinde konforlu, güvenli ve zamanında yolculuk deneyimi sunuyoruz.',
         stats: [
-          { label: 'Mutlu Müşteri', value: '10,000+' },
-          { label: 'Yıllık Deneyim', value: '15+' },
-          { label: 'Transfer Yapıldı', value: '25,000+' },
-          { label: 'Güvenli Yolculuk', value: '%100' },
+          {
+            label: 'Yıllık Tecrübe',
+            value: '20+',
+            detail: 'İstanbul Havalimanı ve Sabiha Gökçen transferlerinde güçlü saha deneyimi.',
+          },
+          {
+            label: 'Başarılı Transfer',
+            value: '25.000+',
+            detail: 'Havalimanı, otel ve şehir içi ulaşım operasyonlarında tamamlanan yolculuklar.',
+          },
+          {
+            label: 'Mutlu Misafir',
+            value: '10.000+',
+            detail: 'Yurtdışından gelen misafirler için güven veren ve planlı ulaşım deneyimi.',
+          },
+          {
+            label: 'Havalimanı Karşılama',
+            value: '7/24',
+            detail: 'Uçuş saatine göre planlanan, günün her anında aktif karşılama desteği.',
+          },
         ],
         missionTitle: 'Misyonumuz',
         missionParagraphs: [
-          'Havalimanı transferlerinde en güvenilir, konforlu ve zamanında hizmeti sunarak yolcularımızın seyahat deneyimini mükemmelleştirmektir. Her müşterimizin güvenliği ve memnuniyeti bizim için önceliklidir.',
-          "15 yılı aşkın deneyimimizle, profesyonel sürücülerimiz ve modern araç filomuzla İstanbul başta olmak üzere Türkiye'nin önde gelen şehirlerinde hizmet veriyoruz.",
+          'Misyonumuz, İstanbul’a gelen her misafirimize havalimanından itibaren güvenli, konforlu ve sorunsuz bir ulaşım deneyimi sunmaktır. 20 yıllık saha tecrübemizle; uçuş takibi, zamanında karşılama, profesyonel sürücü desteği ve modern araç filomuzla misafirlerimizin yolculuğunu kolaylaştırıyoruz.',
+          'Sadece transfer değil; otel ulaşımı, şehir içi özel şoförlü hizmetler ve Türkiye turu planlarında da misafirlerimize güvenilir bir yol arkadaşı olmayı hedefliyoruz.',
+        ],
+        missionChecklist: [
+          'Havalimanında karşılama',
+          'Otel ve şehir içi transfer',
+          'Türkiye turu ve özel rota desteği',
+          'Profesyonel sürücü ve konforlu araç',
+        ],
+        imageTags: [
+          'İstanbul Havalimanı',
+          'Sabiha Gökçen',
+          'Otel Transferi',
+          'Şehir İçi Ulaşım',
         ],
         whyTitle: 'Neden Bizi Seçmelisiniz?',
+        whyDescription:
+          'İstanbul’a gelen misafirler için havalimanı karşılamadan otel ulaşımına kadar planlı, şeffaf ve güven veren bir transfer operasyonu sunuyoruz.',
         whyItems: [
           {
-            title: 'Deneyimli Ekip',
+            title: '20 Yıllık Havalimanı Deneyimi',
             description:
-              'Tüm sürücülerimiz alanında deneyimli, ehliyet belgeleri güncel ve müşteri memnuniyeti odaklı çalışan profesyonellerdir.',
+              'İstanbul Havalimanı ve Sabiha Gökçen transferlerinde yıllardır edindiğimiz saha deneyimiyle misafirlerimizi doğru zamanda, doğru noktadan karşılıyoruz.',
           },
           {
-            title: 'Modern Araç Filosu',
+            title: 'Yurtdışı Misafir Karşılama',
             description:
-              "Ekonomi'den VIP'ye kadar geniş araç seçeneklerimiz, düzenli bakımı yapılan ve her türlü konfora sahip araçlardan oluşur.",
+              'İstanbul’a ilk kez gelen misafirler için anlaşılır iletişim, kolay buluşma noktası ve güven veren karşılama süreci sunuyoruz.',
           },
           {
-            title: '7/24 Destek',
+            title: 'Otel, Transfer ve Tur Hizmetleri',
             description:
-              'Her an ulaşabileceğiniz müşteri hizmetlerimiz, sorularınızı ve taleplerinizi hızlıca çözer.',
+              'Havalimanı-otel transferlerinin yanında şehir içi ulaşım, özel rota ve Türkiye turu ihtiyaçlarında da destek sağlıyoruz.',
           },
           {
-            title: 'Şeffaf Fiyatlandırma',
+            title: 'Şeffaf ve Güvenilir Hizmet',
             description:
-              'Net ve anlaşılır fiyat politikamız ile gizli ücret veya ek maliyet sürprizleri yaşamazsınız.',
+              'Rezervasyon öncesi net bilgilendirme, zamanında hizmet ve sürpriz maliyet oluşturmayan fiyat politikasıyla güvenilir bir yolculuk sunuyoruz.',
           },
         ],
-        ctaTitle: 'Siz de Güvenle Seyahat Edin',
+        ctaTitle: 'İstanbul’a İndiğiniz Andan İtibaren Güvenli Ulaşım',
         ctaDescription:
-          'Havalimanı transferlerinizde bize güvenin, konforlu ve güvenli yolculuğun keyfini çıkarın.',
-        ctaButton: 'Rezervasyon Yap',
+          'İstanbul Havalimanı, Sabiha Gökçen, otel transferleri, şehir içi ulaşım ve Türkiye turu planları için rezervasyonunuzu birkaç adımda oluşturun.',
+        ctaButton: 'Transfer Planla',
       },
       notFound: {
         title: 'Sayfa Bulunamadı',
@@ -754,47 +790,78 @@ export const translations: Record<LanguageCode, LanguageDescriptor> = {
         mapTitle: 'GetTransfer Istanbul Office',
       },
       about: {
-        title: 'About Us',
+        badge: 'ABOUT US',
+        title: '20 Years of Trust in Istanbul Airport Transfers',
         description:
-          "As GetTransfer Istanbul, we provide reliable and comfortable transfer service at Turkey's leading airports.",
+          'We welcome international guests at Istanbul Airport and Sabiha Gokcen, providing comfortable, safe and on-time travel for hotel transfers, city rides and Turkey tour services.',
         stats: [
-          { label: 'Happy Customers', value: '10,000+' },
-          { label: 'Years of Experience', value: '15+' },
-          { label: 'Transfers Completed', value: '25,000+' },
-          { label: 'Safe Journeys', value: '100%' },
+          {
+            label: 'Years of Experience',
+            value: '20+',
+            detail: 'Strong operational know-how in Istanbul Airport and Sabiha Gokcen transfers.',
+          },
+          {
+            label: 'Successful Transfers',
+            value: '25,000+',
+            detail: 'Completed airport, hotel and city transfer operations across Istanbul.',
+          },
+          {
+            label: 'Happy Guests',
+            value: '10,000+',
+            detail: 'A reliable and well-planned arrival experience for guests coming from abroad.',
+          },
+          {
+            label: 'Airport Meet & Greet',
+            value: '24/7',
+            detail: 'Meet-and-greet support scheduled around flight times, day and night.',
+          },
         ],
         missionTitle: 'Our Mission',
         missionParagraphs: [
-          'Our mission is to provide the most reliable, comfortable and punctual service in airport transfers, making every journey exceptional. The safety and satisfaction of our passengers are our top priority.',
-          'With over 15 years of experience, our professional drivers and modern fleet serve Istanbul and other major cities across Turkey.',
+          'Our mission is to provide every guest arriving in Istanbul with a safe, comfortable and seamless transportation experience from the moment they land. With 20 years of hands-on experience, we make travel easier through flight tracking, on-time meet-and-greet service, professional drivers and a modern fleet.',
+          'We aim to be more than a transfer company by supporting our guests not only with hotel transportation, but also with private chauffeur services in the city and Turkey tour planning.',
+        ],
+        missionChecklist: [
+          'Airport meet and greet',
+          'Hotel and city transfers',
+          'Turkey tour and custom route support',
+          'Professional drivers and comfortable vehicles',
+        ],
+        imageTags: [
+          'Istanbul Airport',
+          'Sabiha Gokcen',
+          'Hotel Transfer',
+          'City Transportation',
         ],
         whyTitle: 'Why Choose Us?',
+        whyDescription:
+          'For guests arriving in Istanbul, we offer a well-planned, transparent and confidence-inspiring transfer operation from airport pick-up to hotel transportation.',
         whyItems: [
           {
-            title: 'Experienced Team',
+            title: '20 Years of Airport Experience',
             description:
-              'All of our drivers are experienced professionals with valid licenses who focus on customer satisfaction.',
+              'With years of field experience in Istanbul Airport and Sabiha Gokcen transfers, we meet our guests at the right place and at the right time.',
           },
           {
-            title: 'Modern Fleet',
+            title: 'Welcoming International Guests',
             description:
-              'From economy to VIP, our fleet consists of well-maintained vehicles equipped with every comfort.',
+              'For guests visiting Istanbul for the first time, we provide clear communication, easy meeting points and a reassuring arrival process.',
           },
           {
-            title: '24/7 Support',
+            title: 'Hotel, Transfer and Tour Services',
             description:
-              'Our customer support is available at any time to answer your questions and handle your requests quickly.',
+              'In addition to airport-to-hotel transfers, we also support city transportation, private routes and Turkey tour requests.',
           },
           {
-            title: 'Transparent Pricing',
+            title: 'Transparent and Reliable Service',
             description:
-              'With clear pricing, you never face hidden fees or unexpected charges.',
+              'We provide a trustworthy travel experience with clear pre-booking information, punctual service and a pricing policy without surprise costs.',
           },
         ],
-        ctaTitle: 'Travel with Confidence',
+        ctaTitle: 'Safe Transportation from the Moment You Land in Istanbul',
         ctaDescription:
-          'Trust us for your airport transfers and enjoy a comfortable and safe journey.',
-        ctaButton: 'Book a Transfer',
+          'Plan your reservation in just a few steps for Istanbul Airport, Sabiha Gokcen, hotel transfers, city transportation and Turkey tours.',
+        ctaButton: 'Plan Your Transfer',
       },
       notFound: {
         title: 'Page Not Found',
@@ -1058,47 +1125,78 @@ export const translations: Record<LanguageCode, LanguageDescriptor> = {
         mapTitle: 'GetTransfer Istanbul Büro',
       },
       about: {
-        title: 'Über uns',
+        badge: 'ÜBER UNS',
+        title: '20 Jahre Vertrauen bei Flughafentransfers in Istanbul',
         description:
-          'GetTransfer Istanbul bietet zuverlässige und komfortable Transfers an den wichtigsten Flughäfen der Türkei.',
+          'Wir begrüßen internationale Gäste am Istanbul Airport und am Sabiha Gokcen Airport und bieten komfortable, sichere und pünktliche Fahrten für Hoteltransfers, Stadtfahrten und Türkei-Touren.',
         stats: [
-          { label: 'Zufriedene Kunden', value: '10.000+' },
-          { label: 'Jahre Erfahrung', value: '15+' },
-          { label: 'Transfers durchgeführt', value: '25.000+' },
-          { label: 'Sichere Fahrten', value: '100%' },
+          {
+            label: 'Jahre Erfahrung',
+            value: '20+',
+            detail: 'Starke operative Erfahrung bei Transfers am Istanbul Airport und Sabiha Gokcen.',
+          },
+          {
+            label: 'Erfolgreiche Transfers',
+            value: '25.000+',
+            detail: 'Durchgeführte Flughafen-, Hotel- und Stadttransferfahrten in Istanbul.',
+          },
+          {
+            label: 'Zufriedene Gäste',
+            value: '10.000+',
+            detail: 'Ein verlässliches und gut geplantes Ankunftserlebnis für Gäste aus dem Ausland.',
+          },
+          {
+            label: 'Flughafenempfang',
+            value: '24/7',
+            detail: 'Meet-and-greet-Service rund um die Uhr, passend zu den Flugzeiten.',
+          },
         ],
         missionTitle: 'Unsere Mission',
         missionParagraphs: [
-          'Wir bieten den zuverlässigsten, komfortabelsten und pünktlichsten Flughafentransfer und machen jede Fahrt besonders. Die Sicherheit und Zufriedenheit unserer Fahrgäste stehen für uns an erster Stelle.',
-          'Mit über 15 Jahren Erfahrung bedienen unsere professionellen Fahrer und unsere moderne Flotte Istanbul und viele weitere Städte in der Türkei.',
+          'Unsere Mission ist es, jedem Gast, der in Istanbul ankommt, vom ersten Moment an eine sichere, komfortable und reibungslose Beförderung zu bieten. Mit 20 Jahren Praxiserfahrung erleichtern wir die Reise durch Flugverfolgung, pünktlichen Empfang, professionelle Fahrer und eine moderne Fahrzeugflotte.',
+          'Wir möchten mehr sein als nur ein Transferunternehmen und unsere Gäste auch bei Hoteltransfers, privaten Fahrten in der Stadt und der Planung von Türkei-Touren zuverlässig begleiten.',
+        ],
+        missionChecklist: [
+          'Empfang am Flughafen',
+          'Hotel- und Stadttransfers',
+          'Türkei-Touren und individuelle Routen',
+          'Professionelle Fahrer und komfortable Fahrzeuge',
+        ],
+        imageTags: [
+          'Istanbul Airport',
+          'Sabiha Gokcen',
+          'Hoteltransfer',
+          'Stadttransport',
         ],
         whyTitle: 'Warum wir?',
+        whyDescription:
+          'Für Gäste, die in Istanbul ankommen, bieten wir einen gut geplanten, transparenten und vertrauenswürdigen Transferablauf vom Flughafen bis zum Hotel.',
         whyItems: [
           {
-            title: 'Erfahrenes Team',
+            title: '20 Jahre Flughafenerfahrung',
             description:
-              'Alle unsere Fahrer sind erfahrene Profis mit gültigen Lizenzen und kundenorientiertem Service.',
+              'Mit langjähriger Erfahrung bei Transfers am Istanbul Airport und Sabiha Gokcen empfangen wir unsere Gäste am richtigen Ort und zur richtigen Zeit.',
           },
           {
-            title: 'Moderne Flotte',
+            title: 'Empfang internationaler Gäste',
             description:
-              'Von Economy bis VIP besteht unsere Flotte aus gepflegten Fahrzeugen mit voller Ausstattung.',
+              'Für Gäste, die Istanbul zum ersten Mal besuchen, bieten wir klare Kommunikation, leicht verständliche Treffpunkte und einen sicheren Empfangsprozess.',
           },
           {
-            title: '24/7 Support',
+            title: 'Hotel-, Transfer- und Tourservice',
             description:
-              'Unser Kundenservice ist jederzeit erreichbar und beantwortet Fragen schnell.',
+              'Neben Flughafen-Hotel-Transfers unterstützen wir auch bei Stadtfahrten, privaten Routen und Türkei-Touren.',
           },
           {
-            title: 'Transparente Preise',
+            title: 'Transparenter und zuverlässiger Service',
             description:
-              'Klare Preisgestaltung ohne versteckte Gebühren oder Überraschungen.',
+              'Mit klaren Informationen vor der Buchung, pünktlichem Service und einer Preisstruktur ohne Überraschungen sorgen wir für eine verlässliche Reise.',
           },
         ],
-        ctaTitle: 'Reisen Sie mit Vertrauen',
+        ctaTitle: 'Sichere Mobilität ab Ihrer Landung in Istanbul',
         ctaDescription:
-          'Vertrauen Sie uns bei Ihrem Flughafentransfer und genießen Sie eine komfortable und sichere Fahrt.',
-        ctaButton: 'Transfer buchen',
+          'Planen Sie Ihre Reservierung in wenigen Schritten für Istanbul Airport, Sabiha Gokcen, Hoteltransfers, Stadtfahrten und Türkei-Touren.',
+        ctaButton: 'Transfer planen',
       },
       notFound: {
         title: 'Seite nicht gefunden',
@@ -1365,47 +1463,78 @@ export const translations: Record<LanguageCode, LanguageDescriptor> = {
         mapTitle: 'Bureau GetTransfer Istanbul',
       },
       about: {
-        title: 'À propos',
+        badge: 'À PROPOS',
+        title: '20 ans de confiance dans les transferts aéroport à Istanbul',
         description:
-          'GetTransfer Istanbul propose un service de transfert fiable et confortable dans les principaux aéroports de Turquie.',
+          'Nous accueillons les voyageurs internationaux à l’aéroport d’Istanbul et à Sabiha Gokcen, en offrant des trajets confortables, sûrs et ponctuels pour les transferts vers l’hôtel, les déplacements urbains et les circuits en Turquie.',
         stats: [
-          { label: 'Clients satisfaits', value: '10 000+' },
-          { label: "Années d'expérience", value: '15+' },
-          { label: 'Transferts réalisés', value: '25 000+' },
-          { label: 'Trajets sûrs', value: '100%' },
+          {
+            label: "Années d'expérience",
+            value: '20+',
+            detail: 'Une forte expérience opérationnelle sur les transferts à l’aéroport d’Istanbul et à Sabiha Gokcen.',
+          },
+          {
+            label: 'Transferts réalisés',
+            value: '25 000+',
+            detail: 'Des opérations de transfert aéroport, hôtel et ville menées à bien à Istanbul.',
+          },
+          {
+            label: 'Voyageurs satisfaits',
+            value: '10 000+',
+            detail: 'Une arrivée fiable et bien organisée pour les visiteurs venant de l’étranger.',
+          },
+          {
+            label: 'Accueil aéroport',
+            value: '24/7',
+            detail: 'Un service d’accueil planifié selon les horaires de vol, de jour comme de nuit.',
+          },
         ],
         missionTitle: 'Notre mission',
         missionParagraphs: [
-          "Notre mission est d'offrir un service de transfert aéroport fiable, confortable et ponctuel afin de rendre chaque voyage exceptionnel. La sécurité et la satisfaction de nos passagers sont notre priorité.",
-          'Avec plus de 15 ans d’expérience, nos chauffeurs professionnels et notre flotte moderne desservent Istanbul et les principales villes de Turquie.',
+          'Notre mission est d’offrir à chaque visiteur arrivant à Istanbul une expérience de transport sûre, confortable et sans stress dès l’aéroport. Forts de 20 ans d’expérience terrain, nous facilitons chaque trajet grâce au suivi des vols, à un accueil ponctuel, à des chauffeurs professionnels et à une flotte moderne.',
+          'Nous voulons être plus qu’un simple service de transfert et accompagner nos voyageurs aussi bien pour les trajets vers l’hôtel que pour les services avec chauffeur en ville et les circuits en Turquie.',
+        ],
+        missionChecklist: [
+          'Accueil à l’aéroport',
+          'Transferts hôtel et ville',
+          'Circuits en Turquie et itinéraires sur mesure',
+          'Chauffeurs professionnels et véhicules confortables',
+        ],
+        imageTags: [
+          'Aéroport d’Istanbul',
+          'Sabiha Gokcen',
+          'Transfert hôtel',
+          'Transport urbain',
         ],
         whyTitle: 'Pourquoi nous choisir ?',
+        whyDescription:
+          'Pour les voyageurs arrivant à Istanbul, nous proposons une organisation de transfert claire, rassurante et transparente de l’aéroport jusqu’à l’hôtel.',
         whyItems: [
           {
-            title: 'Équipe expérimentée',
+            title: '20 ans d’expérience aéroportuaire',
             description:
-              'Tous nos chauffeurs sont des professionnels expérimentés, titulaires de permis valides et orientés vers la satisfaction client.',
+              'Grâce à nos années d’expérience sur les transferts depuis l’aéroport d’Istanbul et Sabiha Gokcen, nous accueillons nos voyageurs au bon endroit et au bon moment.',
           },
           {
-            title: 'Flotte moderne',
+            title: 'Accueil des visiteurs internationaux',
             description:
-              'De l’économie au VIP, notre flotte est composée de véhicules bien entretenus et confortables.',
+              'Pour les visiteurs qui découvrent Istanbul pour la première fois, nous proposons une communication claire, un point de rendez-vous simple et un accueil rassurant.',
           },
           {
-            title: 'Assistance 24h/24',
+            title: 'Hôtel, transferts et circuits',
             description:
-              'Notre service client est disponible à tout moment pour répondre rapidement à vos questions.',
+              'En plus des transferts aéroport-hôtel, nous accompagnons aussi les trajets urbains, les itinéraires privés et les demandes de circuit en Turquie.',
           },
           {
-            title: 'Tarification transparente',
+            title: 'Service fiable et transparent',
             description:
-              'Des tarifs clairs et sans frais cachés ni mauvaises surprises.',
+              'Nous assurons un voyage fiable grâce à des informations claires avant réservation, un service ponctuel et une politique tarifaire sans surprise.',
           },
         ],
-        ctaTitle: 'Voyagez en toute confiance',
+        ctaTitle: 'Un transport sûr dès votre arrivée à Istanbul',
         ctaDescription:
-          'Faites-nous confiance pour vos transferts aéroport et profitez d’un trajet confortable et sûr.',
-        ctaButton: 'Réserver un transfert',
+          'Planifiez votre réservation en quelques étapes pour l’aéroport d’Istanbul, Sabiha Gokcen, les transferts vers l’hôtel, les trajets urbains et les circuits en Turquie.',
+        ctaButton: 'Planifier mon transfert',
       },
       notFound: {
         title: 'Page introuvable',
@@ -1672,47 +1801,78 @@ export const translations: Record<LanguageCode, LanguageDescriptor> = {
         mapTitle: 'Ufficio GetTransfer Istanbul',
       },
       about: {
-        title: 'Chi siamo',
+        badge: 'CHI SIAMO',
+        title: '20 anni di fiducia nei transfer aeroportuali a Istanbul',
         description:
-          'GetTransfer Istanbul offre un servizio di transfer affidabile e confortevole nei principali aeroporti della Turchia.',
+          'Accogliamo gli ospiti internazionali all’Aeroporto di Istanbul e a Sabiha Gokcen, offrendo viaggi comodi, sicuri e puntuali per transfer hotel, spostamenti in città e tour in Turchia.',
         stats: [
-          { label: 'Clienti soddisfatti', value: '10.000+' },
-          { label: "Anni di esperienza", value: '15+' },
-          { label: 'Transfer completati', value: '25.000+' },
-          { label: 'Viaggi sicuri', value: '100%' },
+          {
+            label: 'Anni di esperienza',
+            value: '20+',
+            detail: 'Solida esperienza operativa nei transfer dall’Aeroporto di Istanbul e da Sabiha Gokcen.',
+          },
+          {
+            label: 'Transfer completati',
+            value: '25.000+',
+            detail: 'Servizi aeroportuali, hotel e urbani completati con successo a Istanbul.',
+          },
+          {
+            label: 'Ospiti soddisfatti',
+            value: '10.000+',
+            detail: 'Un arrivo affidabile e ben organizzato per chi arriva dall’estero.',
+          },
+          {
+            label: 'Accoglienza in aeroporto',
+            value: '24/7',
+            detail: 'Servizio di meet-and-greet attivo giorno e notte in base agli orari dei voli.',
+          },
         ],
         missionTitle: 'La nostra missione',
         missionParagraphs: [
-          'La nostra missione è offrire il servizio più affidabile, confortevole e puntuale per i transfer aeroportuali, rendendo ogni viaggio un’esperienza eccellente. La sicurezza e la soddisfazione dei nostri clienti sono la nostra priorità.',
-          'Con oltre 15 anni di esperienza, i nostri autisti professionisti e la nostra flotta moderna servono Istanbul e le principali città della Turchia.',
+          'La nostra missione è offrire a ogni ospite che arriva a Istanbul un’esperienza di trasporto sicura, confortevole e senza problemi fin dall’aeroporto. Con 20 anni di esperienza sul campo, semplifichiamo ogni viaggio grazie al monitoraggio dei voli, all’accoglienza puntuale, a conducenti professionali e a una flotta moderna.',
+          'Vogliamo essere più di un semplice servizio di transfer e accompagnare i nostri ospiti anche nei trasferimenti verso l’hotel, nei servizi con autista in città e nella pianificazione dei tour in Turchia.',
+        ],
+        missionChecklist: [
+          'Accoglienza in aeroporto',
+          'Transfer hotel e città',
+          'Tour in Turchia e itinerari personalizzati',
+          'Autisti professionali e veicoli confortevoli',
+        ],
+        imageTags: [
+          'Aeroporto di Istanbul',
+          'Sabiha Gokcen',
+          'Transfer hotel',
+          'Trasporto urbano',
         ],
         whyTitle: 'Perché sceglierci?',
+        whyDescription:
+          'Per chi arriva a Istanbul offriamo un servizio di transfer ben organizzato, trasparente e affidabile dall’aeroporto fino all’hotel.',
         whyItems: [
           {
-            title: 'Team esperto',
+            title: '20 anni di esperienza aeroportuale',
             description:
-              'Tutti i nostri autisti sono professionisti esperti con licenze valide e orientati alla soddisfazione del cliente.',
+              'Grazie alla nostra esperienza nei transfer dall’Aeroporto di Istanbul e da Sabiha Gokcen, accogliamo gli ospiti nel punto giusto e al momento giusto.',
           },
           {
-            title: 'Flotta moderna',
+            title: 'Accoglienza per ospiti internazionali',
             description:
-              'Dall’economico al VIP, la nostra flotta è composta da veicoli ben mantenuti e confortevoli.',
+              'Per chi visita Istanbul per la prima volta offriamo comunicazione chiara, punto d’incontro semplice e un processo di accoglienza rassicurante.',
           },
           {
-            title: 'Supporto 24/7',
+            title: 'Hotel, transfer e tour',
             description:
-              'Il nostro servizio clienti è sempre disponibile per rispondere rapidamente alle tue richieste.',
+              'Oltre ai transfer aeroporto-hotel, supportiamo anche spostamenti urbani, percorsi privati e richieste di tour in Turchia.',
           },
           {
-            title: 'Prezzi trasparenti',
+            title: 'Servizio trasparente e affidabile',
             description:
-              'Tariffe chiare senza costi nascosti o sorprese.',
+              'Offriamo un viaggio affidabile con informazioni chiare prima della prenotazione, puntualità e una politica di prezzo senza costi inattesi.',
           },
         ],
-        ctaTitle: 'Viaggia con fiducia',
+        ctaTitle: 'Trasporto sicuro dal momento in cui atterri a Istanbul',
         ctaDescription:
-          'Affidati a noi per il tuo transfer aeroportuale e goditi un viaggio confortevole e sicuro.',
-        ctaButton: 'Prenota un transfer',
+          'Pianifica la tua prenotazione in pochi passaggi per l’Aeroporto di Istanbul, Sabiha Gokcen, transfer hotel, spostamenti in città e tour in Turchia.',
+        ctaButton: 'Pianifica il transfer',
       },
       notFound: {
         title: 'Pagina non trovata',
@@ -1982,47 +2142,78 @@ export const translations: Record<LanguageCode, LanguageDescriptor> = {
         mapTitle: 'مكتب GetTransfer في إسطنبول',
       },
       about: {
-        title: 'من نحن',
+        badge: 'من نحن',
+        title: '20 عامًا من الثقة في نقل مطارات إسطنبول',
         description:
-          'نقدم في GetTransfer Istanbul خدمة نقل موثوقة ومريحة في أبرز مطارات تركيا.',
+          'نستقبل الضيوف القادمين من الخارج في مطار إسطنبول ومطار صبيحة كوكجن، ونوفر رحلات مريحة وآمنة وفي الوقت المحدد لخدمات النقل إلى الفندق والتنقل داخل المدينة والجولات في تركيا.',
         stats: [
-          { label: 'عملاء سعداء', value: '10,000+' },
-          { label: 'سنوات الخبرة', value: '15+' },
-          { label: 'رحلات منجزة', value: '25,000+' },
-          { label: 'رحلات آمنة', value: '100%' },
+          {
+            label: 'سنوات الخبرة',
+            value: '20+',
+            detail: 'خبرة تشغيلية قوية في خدمات النقل من مطار إسطنبول وصبيحة كوكجن.',
+          },
+          {
+            label: 'رحلات ناجحة',
+            value: '25,000+',
+            detail: 'عمليات نقل مكتملة بنجاح بين المطار والفندق وداخل المدينة في إسطنبول.',
+          },
+          {
+            label: 'ضيوف سعداء',
+            value: '10,000+',
+            detail: 'تجربة وصول موثوقة ومنظمة للضيوف القادمين من الخارج.',
+          },
+          {
+            label: 'استقبال في المطار',
+            value: '24/7',
+            detail: 'خدمة استقبال على مدار الساعة وفقًا لمواعيد الرحلات.',
+          },
         ],
         missionTitle: 'مهمتنا',
         missionParagraphs: [
-          'مهمتنا هي تقديم خدمة نقل موثوقة ومريحة وفي الوقت المحدد في المطارات لضمان تجربة سفر مميزة لكل عميل. سلامة ورضا عملائنا هما أولويتنا.',
-          'بخبرة تزيد عن 15 عامًا، يخدمكم سائقونا المحترفون وأسطولنا الحديث في إسطنبول وأهم مدن تركيا.',
+          'مهمتنا هي تقديم تجربة نقل آمنة ومريحة وسلسة لكل ضيف يصل إلى إسطنبول منذ لحظة خروجه من المطار. وبفضل خبرتنا الميدانية الممتدة لـ20 عامًا، نجعل الرحلة أسهل من خلال متابعة الرحلات والاستقبال في الوقت المحدد والسائقين المحترفين وأسطول السيارات الحديث.',
+          'لا نكتفي بخدمة النقل فقط، بل نهدف أيضًا إلى أن نكون شريكًا موثوقًا لضيوفنا في الوصول إلى الفندق والتنقل داخل المدينة وتخطيط الجولات في تركيا.',
+        ],
+        missionChecklist: [
+          'الاستقبال في المطار',
+          'النقل إلى الفندق وداخل المدينة',
+          'دعم الجولات في تركيا والمسارات الخاصة',
+          'سائقون محترفون ومركبات مريحة',
+        ],
+        imageTags: [
+          'مطار إسطنبول',
+          'صبيحة كوكجن',
+          'النقل إلى الفندق',
+          'التنقل داخل المدينة',
         ],
         whyTitle: 'لماذا تختارنا؟',
+        whyDescription:
+          'نقدم للضيوف القادمين إلى إسطنبول خدمة نقل منظمة وشفافة وتبعث على الثقة من الاستقبال في المطار حتى الوصول إلى الفندق.',
         whyItems: [
           {
-            title: 'فريق ذو خبرة',
+            title: '20 عامًا من خبرة المطارات',
             description:
-              'سائقونا محترفون وذوو خبرة، ويتمتعون برخص سارية ويهتمون برضا العملاء.',
+              'بفضل خبرتنا الطويلة في خدمات النقل من مطار إسطنبول وصبيحة كوكجن، نستقبل ضيوفنا في المكان الصحيح وفي الوقت المناسب.',
           },
           {
-            title: 'أسطول حديث',
+            title: 'استقبال الضيوف القادمين من الخارج',
             description:
-              'من المركبات الاقتصادية إلى الفاخرة، يتكون أسطولنا من مركبات مريحة يتم صيانتها بانتظام.',
+              'لمن يزور إسطنبول للمرة الأولى نوفر تواصلًا واضحًا ونقطة لقاء سهلة وعملية استقبال مريحة وتبعث على الاطمئنان.',
           },
           {
-            title: 'دعم على مدار الساعة',
+            title: 'خدمات الفندق والنقل والجولات',
             description:
-              'خدمة العملاء متاحة دائمًا للإجابة على استفساراتك بسرعة.',
+              'إلى جانب النقل بين المطار والفندق، ندعم أيضًا التنقل داخل المدينة والمسارات الخاصة وطلبات الجولات في تركيا.',
           },
           {
-            title: 'تسعير شفاف',
+            title: 'خدمة موثوقة وشفافة',
             description:
-              'أسعار واضحة من دون رسوم خفية أو مفاجآت.',
+              'نقدم رحلة موثوقة بفضل المعلومات الواضحة قبل الحجز والخدمة في الوقت المحدد وسياسة أسعار من دون تكاليف مفاجئة.',
           },
         ],
-        ctaTitle: 'سافر بثقة',
+        ctaTitle: 'نقل آمن منذ لحظة وصولك إلى إسطنبول',
         ctaDescription:
-          'اعتمد علينا في نقل المطار واستمتع برحلة مريحة وآمنة.',
-        ctaButton: 'احجز نقلك',
+          'خطط لحجزك في بضع خطوات لمطار إسطنبول وصبيحة كوكجن والنقل إلى الفندق والتنقل داخل المدينة والجولات في تركيا.',
+        ctaButton: 'خطط للنقل',
       },
       notFound: {
         title: 'الصفحة غير موجودة',
